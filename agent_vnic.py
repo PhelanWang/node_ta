@@ -22,7 +22,7 @@ def vnic_analysis(subtask_id, args):
             "brief":"未能旁路此网卡数据",
             "detail":"未能旁路此网卡数据"
         }
-    vt = VnicTest('qemu-kvm','vhost')
+    vt = VnicTest('qemu-kvm', 'vhost')
     ###
     #shut down all vms !!
     type = "未能旁路此网卡数据"
