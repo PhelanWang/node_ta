@@ -12,21 +12,25 @@ import commands
 
 
 mpath = ''
-ndebug=True
+ndebug = False
 # default bin  path  is '/usr/libexec' ,  bin name can set
 # default module path is /usr/lib/..
 class VnicTest(object):
     qemu_kvm = ''
     ttype = ''
     def __init__(self,binname,ttype):
-        self.qemu_kvm = binname;
-        self.ttype=ttype
+        self.qemu_kvm = binname
+        self.ttype = ttype
 
     #only check if vms run
+    # 使用vhost_net.ko旁路出网络数据
+    # 加载vhost_net.ko模块要先关闭所有虚拟机，即关闭所有的qemu-kvm进程
+    # 测试之前关闭虚拟机，点击测试之后再启动虚拟机r
+    # 该方法检测是否有qemu-kvm进程在执行
     def is_ready(self):
-        pids= os.popen("pidof "+self.qemu_kvm+"").read().strip('\n').strip(' ');
+        pids = os.popen("pidof " + self.qemu_kvm + "").read().strip('\n').strip(' ');
         print pids
-        if pids=='':
+        if pids == '':
             return 'ok'
         else :
             return 'false'
@@ -36,19 +40,25 @@ class VnicTest(object):
     #   begin replace bins and modules
     def begin(self):
         ready=self.is_ready();
-        print "ready = "+ready
+        print "ready = " + ready
         if ready == "ok":
             os.system('rmmod vhost_net')
+            # vhost_pck.log保存测试时旁路出的网络数据，加载模块时先删除该文件
             is_file = os.popen("ls /var/log/ | grep 'vhost_pck.log'").read().strip("\n").strip(" ");
             if is_file =='vhost_pck.log':
                 print "rm this file"
-                os.system("rm  -f  /var/log/vhost_pck.log")
+                os.system("rm -f /var/log/vhost_pck.log")
             ########################################################################
-            if(ndebug==True):
+            if(ndebug == True):
                 self.replace()
-            os.system("rmmod vhost_net")
+
+            print os.getcwd()
+            vhost_path = os.getcwd() + '/vnic/vhost_net.ko'
+            os.system("insmod " + vhost_path)
+
+            # os.system("rmmod vhost_net")
             print time.time()
-#             time.sleep(60*5)
+            time.sleep(60*5)
             print time.time()
             return True
         else:
@@ -157,6 +167,7 @@ class VnicTest(object):
     #return report and dis replace
     def stop(self):
         self.shutdown()
+        os.system("rmmod vhost_net")
         #########################################
         if(ndebug==True):
             self.disreplace()
