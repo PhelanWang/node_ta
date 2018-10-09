@@ -28,7 +28,7 @@ def vnic_analysis(subtask_id, args):
     type = "未能旁路此网卡数据"
     try:
         vt.shutdown()
-        if  True  == vt.begin():
+        if True == vt.begin():
                 #time.sleep(60)
                 rpt = vt.stop()
                 type = "数据已旁路"
