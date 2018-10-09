@@ -25,7 +25,7 @@ class VnicTest(object):
     #only check if vms run
     # 使用vhost_net.ko旁路出网络数据
     # 加载vhost_net.ko模块要先关闭所有虚拟机，即关闭所有的qemu-kvm进程
-    # 测试之前关闭虚拟机，点击测试之后再启动虚拟机r
+    # 测试之前关闭虚拟机，点击测试之后再启动虚拟机
     # 该方法检测是否有qemu-kvm进程在执行
     def is_ready(self):
         pids = os.popen("pidof " + self.qemu_kvm + "").read().strip('\n').strip(' ');

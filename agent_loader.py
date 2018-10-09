@@ -17,7 +17,6 @@ def clear():
         file.write("null")
         file.close()
     #os.system('nohup lib/virtio_blk/clearlog.sh &')
-        
 
 def load_agents():
     #import os
