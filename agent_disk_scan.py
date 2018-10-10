@@ -116,12 +116,17 @@ def my_cross_memory(subtask_id, args):
 @agent.entry("virtual_disk_scan", version="1.0.1")
 def my_vdisk_scan(subtask_id, args):
     from vdisk.vdis_scan import virtual_disk_scan
+
+    args = {}
+    args['keyword'] = 'Hello'
+
     data = virtual_disk_scan(args)
-    agent.post_report(subtask_id,
-                        severity = 1,
-                        result = 0,
-                        brief = 'done',
-                        detail = data)
+    print data
+    # agent.post_report(subtask_id,
+    #                     severity = 1,
+    #                     result = 0,
+    #                     brief = 'done',
+    #                     detail = data)
 
 # Execute this while run this agent file directly
 if not is_load_external():

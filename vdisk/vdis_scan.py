@@ -41,6 +41,30 @@ def disreplace_qemu_kvm():
     print result
 
 
+# 根据关键字，生成以关键字命名的文件
+# 在 virtio_blk.log 文件中查找关键字，并将查找到的内容保存到对应文件中
+def find_key_word(key_words):
+    # 关键字和对应文件的字典
+    file_word = {}
+
+    # 创建关键字文件
+    for word in key_words:
+        os.system('touch /home/qemu/' + word + '.txt')
+        file_word[word] = open('/home/qemu/' + word + '.txt', 'w')
+
+    lines = None
+    with open('/home/qemu/virtio_blk.log', 'r') as file:
+        lines = file.readlines()
+
+    for line in lines:
+        for word in key_words:
+            if word in line:
+                file_word[word].write(line)
+
+    for word in key_words:
+        file_word[word].close()
+
+
 # 分析文件中的关键字
 def virtual_disk_scan(args):
     import os
@@ -49,7 +73,7 @@ def virtual_disk_scan(args):
         os.mkdir("/home/qemu/")
         os.system("chown qemu /home/qemu")
         os.system("chmod 777 /home/qmeu")
-    os.system('rm /home/qemu/virtio_blk.log')
+    # os.system('rm /home/qemu/virtio_blk.log')
 
     # 启动测试之前先关闭所有的 qemu-kvm 进程
     shutdown()
@@ -59,45 +83,21 @@ def virtual_disk_scan(args):
     # 等待启动虚拟机，抓取文件，然后关闭所有 qemu-kvm 还原文件
     disreplace_qemu_kvm()
 
-    keyword = args['keyword']
-    data = ''
-    if keyword == '':
-        keyword = ''
-    # keyword=u'经济 15% 南洋科技'
-    m_list = keyword.split(' ')
-    # print m_list
-    s = ''
-    # 拼接关键字
-    for item in m_list:
-        s += item + ' '
+    keywords = args['keyword']
+    m_list = keywords.strip('\n ').split(' ')
 
-    root = '/blk/virtio_blk'
-    current_path = os.getcwd()
-    error = os.system(current_path + root + '/run.sh ' + '/home/qemu/virtio_blk.log ' + s)
+    find_key_word(m_list)
+
     num = len(m_list)  # 关键字个数
 
-    if not error:
-        while num:
-            for filename in m_list:
-                filepath = '/tmp/virtio_blk/' + filename + '.txt'
-                if os.path.exists(filepath):
-                    num -= 1
-                    # 说明文件个数不够，继续等待知道文件个数和m_list长度大小一致
-            print num
-            if num:
-                num = len(m_list)
-                # 睡眠1秒在查找
-                time.sleep(1)
-
-                # 此时文件必定以及全部存在
-        for filename in m_list:
-            filepath = '/tmp/virtio_blk/' + filename + '.txt'
-            fo = open(filepath)
-            try:
-                data += fo.read() + '\n'
-            finally:
-                fo.close()
-        return data.replace('[.:,;\\]', '')
-    else:
-        print 'error'
-        return 'error'
+    data = ''
+    for file_name in m_list:
+        file_path = '/home/qemu/' + file_name + '.txt'
+        fo = open(file_path, 'r')
+        try:
+            data += fo.read() + '\n'
+        finally:
+            fo.close()
+            os.system('rm ' + '/home/qemu/' + file_name + '.txt')
+    # os.system('rm ' + '/home/qemu/virio_blk.log')
+    return data
