@@ -28,7 +28,7 @@ class VnicTest(object):
     # 测试之前关闭虚拟机，点击测试之后再启动虚拟机
     # 该方法检测是否有qemu-kvm进程在执行
     def is_ready(self):
-        pids = os.popen("pidof " + self.qemu_kvm + "").read().strip('\n').strip(' ')
+        pids = os.popen("pidof " + self.qemu_kvm).read().strip('\n').strip(' ')
         print pids
         if pids == '':
             return 'ok'
@@ -39,7 +39,7 @@ class VnicTest(object):
     #   delete log begore test and
     #   begin replace bins and modules
     def begin(self):
-        ready=self.is_ready();
+        ready=self.is_ready()
         print "ready = " + ready
         if ready == "ok":
             # vhost_pck.log保存测试时旁路出的网络数据，加载模块时先删除该文件
@@ -101,28 +101,30 @@ class VnicTest(object):
 
     def deal_hexdump(self):
         is_file = os.popen("ls /home/qemu/ | grep 'vhost_net.log'").read().strip("\n").strip(" ");
-        if is_file =='vhost_net.log':
-#             os.system('text2pcap /var/log/vhost_pck.log  /var/log/vniclog')
-#             out = commands.getstatusoutput("tshark -a duration:120 -Y 'http contains \"text/html\" and http contains \"HTTP/1.1 200 OK\"' -r /var/log/vniclog  -V")
-#             str = out[1]
-#             smpout = commands.getstatusoutput("tshark -a duration:120 -Y 'http contains \"text/html\" ' -r /var/log/vniclog ")
-#             str2 = smpout[1]
-            file = open("/hoem/qemu/vhost_net.log", "r")
+        if is_file == 'vhost_net.log':
+            # os.system('text2pcap /home/qemu/vhost_net.log  /home/qemu/vhost_netlog')
+            # out = commands.getstatusoutput("tshark -a duration:120 -Y 'http contains \"text/html\" and http contains \"HTTP/1.1 200 OK\"' -r /home/qemu/vhost_netlog  -V")
+            # str = out[1]
+            # smpout = commands.getstatusoutput("tshark -a duration:120 -Y 'http contains \"text/html\" ' -r /home/qemu/vhost_netlog ")
+            # str2 = smpout[1]
+
+            # htmlstr = re.findall(r'<html>.+?</html>', str, re.S)
+
+            file = open('/home/qemu/vhost_net.log', 'r')
             str = file.read()
-            htmlstr = re.findall(r'<html>.+?</html>', str, re.S)
-#             htmlstr = re.findall(r'baidu.com', str, re.S)
+            htmlstr = re.findall(r'GET.+?keep-alive', str, re.S)
+
             if len(htmlstr) >= 1:
                 report = {
                     "brief": str,
                     "detail": htmlstr
                 }
-            else :
+            else:
                 report = {
                     "brief":'未能旁路网卡数据',
                     "detail":'请检查网络设置，正确访问网络并运行虚拟机'
                 }
-    
-        else :
+        else:
             report = {
                 "brief":'未能旁路网卡数据',
                 "detail":'请检查网络设置，正确访问网络并运行虚拟机'
@@ -171,9 +173,9 @@ class VnicTest(object):
 
 if __name__ == "__main__":
     vc = VnicTest('qemu-kvm', 'vhost');
-    vc.begin()
-    vc.stop()
+    # vc.begin()
+    # vc.stop()
     report = vc.deal_hexdump()
-    print report['brief']
-    print report['detail']
+    # print report['brief']
+    # print report['detail']
 
