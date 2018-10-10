@@ -2,6 +2,26 @@
 
 import os
 
+
+# 检测是否有 qemu-kvm 进程在运行
+def is_ready():
+    pids = os.popen("pidof qemu-kvm").read().strip('\n').strip(' ')
+    print pids
+    if pids == '':
+        return True
+    else:
+        return False
+
+
+# shutdown 会关闭所有的 qemu-kvm 虚拟机进程
+def shutdown():
+     flag = is_ready()
+     while not flag:
+         pids = os.popen("pidof qemu-kvm").read().strip('\n').strip(' ').split(' ')
+         for pid in pids:
+             os.system("kill -9 " + pid)
+         flag = is_ready()
+
 # 将 vdisk 文件夹中的 qemu-kvm 替换到 /usr/libexec/qemu-kvm
 # 将 /usr/libexec/qemu-kvm 备份为 /usr/libexec/qemu-kvm.back
 # 以便旁路出文件数据
@@ -25,8 +45,19 @@ def disreplace_qemu_kvm():
 def virtual_disk_scan(args):
     import os
     import time
+    if not os.path.exists("/home/qemu/"):
+        os.mkdir("/home/qemu/")
+        os.system("chown qemu /home/qemu")
+        os.system("chmod 777 /home/qmeu")
+    os.system('rm /home/qemu/virtio_blk.log')
 
+    # 启动测试之前先关闭所有的 qemu-kvm 进程
+    shutdown()
+    # 然后替换 qemu-kvm
+    replace_qemu_kvm()
 
+    # 等待启动虚拟机，抓取文件，然后关闭所有 qemu-kvm 还原文件
+    disreplace_qemu_kvm()
 
     keyword = args['keyword']
     data = ''
@@ -40,17 +71,9 @@ def virtual_disk_scan(args):
     for item in m_list:
         s += item + ' '
 
-    if not os.path.exists("/home/qemu/"):
-        os.mkdir("/home/qemu/")
-        os.system("chown qemu /home/qemu")
-        os.system("chmod 777 /home/qmeu")
-
     root = '/blk/virtio_blk'
-
     current_path = os.getcwd()
-
     error = os.system(current_path + root + '/run.sh ' + '/home/qemu/virtio_blk.log ' + s)
-
     num = len(m_list)  # 关键字个数
 
     if not error:
@@ -74,8 +97,7 @@ def virtual_disk_scan(args):
                 data += fo.read() + '\n'
             finally:
                 fo.close()
-        print 'data:', data.replace('[.:,;\\]', '')
-        return xmlrpclib.Binary(data.replace('[.:,;\\]', ''))
+        return data.replace('[.:,;\\]', '')
     else:
         print 'error'
-        return xmlrpclib.Binary('error')
+        return 'error'
