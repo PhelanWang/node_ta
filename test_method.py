@@ -10,4 +10,4 @@ from agent_quick_flaw_scan import my_quick_kvmflaw_scan, my_quick_ovirtflaw_scan
 
 
 if __name__ == '__main__':
-    pass
+    my_quick_libvirtflaw_scan(0, 0)
