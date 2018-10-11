@@ -120,6 +120,5 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
 if not is_load_external():
 #     my_quick_VDSMflaw_scan(0, 0)
     # Run agent
-    # agent.run()
-    pass
+    agent.run()
 

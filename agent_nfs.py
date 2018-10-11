@@ -52,8 +52,7 @@ if not is_load_external():
 #     args['ip'] = '192.168.1.106'
 #     args['test_filename'] = 'abc'
 #     my_nfs(0, args)
-#     agent.run()
-    pass
+    agent.run()
     
     
     

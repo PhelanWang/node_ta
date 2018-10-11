@@ -130,9 +130,9 @@ def my_vdisk_scan(subtask_id, args):
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    args = {}
-    args["path"] = '/root/share/c3d4181e-bfda-4c78-bfb6-d7205959db02'
-    args["name"]  = 'c3d4181e-bfda-4c78-bfb6-d7205959db02'
+    # args = {}
+    # args["path"] = '/root/share/c3d4181e-bfda-4c78-bfb6-d7205959db02'
+    # args["name"]  = 'c3d4181e-bfda-4c78-bfb6-d7205959db02'
 #     print 'report: ', my_disk_scan(0, {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
 #     my_erase_scan(0, {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
 
@@ -140,7 +140,7 @@ if not is_load_external():
 #     my_disk_scan(0, args)
 #     my_erase_scan(0, args)
 #     my_cross_memory(0, 0)
-    my_vdisk_scan(0, args)
+#     my_vdisk_scan(0, args)
     # Run agent
-#     agent.run()
+    agent.run()
 
