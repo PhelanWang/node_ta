@@ -56,8 +56,8 @@ def my_quick_ovirtflaw_scan(subtask_id,args):
     
     ret=''
     for s in report:
-        ret+=s;
-    
+        ret += s
+
     print report
     if report == None:
         agent.post_failure(subtask_id)
@@ -101,7 +101,7 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
     report = getFlawInfoBySql("select * from VDSM_flaw_scan")#此处的report返回一个包含所有VDSM漏洞信息的列表
     ret=''
     for s in report:
-        ret+=s;
+        ret += s
     
     print 'value: ', ret
     if report == None:
