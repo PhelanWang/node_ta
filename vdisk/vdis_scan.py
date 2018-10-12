@@ -76,12 +76,23 @@ def virtual_disk_scan(args):
     # os.system('rm /home/qemu/virtio_blk.log')
 
     # 启动测试之前先关闭所有的 qemu-kvm 进程
+    print("start shutdown. . .\n")
     shutdown()
     # 然后替换 qemu-kvm
+    print("start replace. . .\n")
     replace_qemu_kvm()
 
+    print("Please start vm. . .")
+    for i in range(10):
+        print(str(i)+' ')
+        time.sleep(60)
+
+    print("start shutdown. . .\n")
+    shutdown()
     # 等待启动虚拟机，抓取文件，然后关闭所有 qemu-kvm 还原文件
+    print("start disreplace. . .\n")
     disreplace_qemu_kvm()
+
 
     keywords = args['keyword']
     m_list = keywords.strip('\n ').split(' ')
