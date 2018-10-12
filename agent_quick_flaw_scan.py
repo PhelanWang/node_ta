@@ -73,13 +73,13 @@ def my_quick_ovirtflaw_scan(subtask_id,args):
 # args = '' or None
 # version = '1.0.2'
 @agent.entry("quick_libvirtflaw_scan", version="1.0.2")
-def my_quick_libvirtflaw_scan(subtask_id,args):
+def my_quick_libvirtflaw_scan(subtask_id, args):
     from quick_flaw_scan.ShowInfoOfScanlibvirt_flaw import getFlawInfoBySql
     report = getFlawInfoBySql("select * from libvirt_flaw_scan")#此处的report返回一个包含所有libvirt漏洞信息的列表
     print report
     ret=''
     for s in report:
-        ret+=s;
+        ret += s
     if report == None:
         agent.post_failure(subtask_id)
     else:
@@ -120,6 +120,5 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
 if not is_load_external():
 #     my_quick_VDSMflaw_scan(0, 0)
     # Run agent
-    # agent.run()
-    pass
+    agent.run()
 

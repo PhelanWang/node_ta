@@ -50,9 +50,9 @@ def vnc(subtask_id, args):
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    vnc(0, 0)
+    # vnc(0, 0)
     # Run agent
-#     agent.run()
-    #os.system('bash spice/run.sh')
+    agent.run()
+    # os.system('bash spice/run.sh')
     
     
