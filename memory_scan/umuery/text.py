@@ -1,4 +1,5 @@
-#coding=utf-8
+#coding: utf-8
+
 import os,re
 #将a文件的字符去出在b文件中执行查找操作。如果存在就直接写入文件
 def getselect(str):
