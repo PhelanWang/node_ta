@@ -85,7 +85,7 @@ def virtual_disk_scan(args):
     print("Please start vm. . .")
     for i in range(10):
         print(str(i)+' ')
-        time.sleep(60)
+        # time.sleep(60)
 
     print("start shutdown. . .\n")
     shutdown()

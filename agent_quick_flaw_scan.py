@@ -118,10 +118,10 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    my_quick_VDSMflaw_scan(0, 0)
-    my_quick_libvirtflaw_scan(0, 0)
-    my_quick_ovirtflaw_scan(0, 0)
-    my_quick_kvmflaw_scan(0, 0)
+    # my_quick_VDSMflaw_scan(0, 0)
+    # my_quick_libvirtflaw_scan(0, 0)
+    # my_quick_ovirtflaw_scan(0, 0)
+    # my_quick_kvmflaw_scan(0, 0)
     # Run agent
-    # agent.run()
+    agent.run()
 

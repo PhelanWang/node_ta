@@ -55,8 +55,7 @@ if __name__ == "__main__":
     # Load all agent
 #     if os.path.exists('/tmp/virtio_write.log'):
 #         os.remove('/tmp/virtio_write.log')
-    load_agents()
-       
     # Run service
     globals()['AGENT_LOADER'] = 'AGENT_LOADER'
+    load_agents()
     agent.run()

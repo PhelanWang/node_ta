@@ -143,6 +143,6 @@ if not is_load_external():
 #     my_vdisk_scan(0, args)
     # Run agent
     # my_cross_memory(0, 0)
-    my_vdisk_scan(0, 0)
-#     agent.run()
+    # my_vdisk_scan(0, 0)
+    agent.run()
 
