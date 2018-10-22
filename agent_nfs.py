@@ -48,10 +48,10 @@ def my_nfs(subtask_id,args):
 # Execute this while run this agent file directly
 if not is_load_external():
     # Run agent
-#     args = {}
-#     args['ip'] = '192.168.1.106'
-#     args['test_filename'] = 'abc'
-#     my_nfs(0, args)
+    args = {}
+    args['ip'] = '192.168.1.113'
+    args['test_filename'] = 'abc'
+    my_nfs(0, args)
     agent.run()
     
     

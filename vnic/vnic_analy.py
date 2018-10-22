@@ -49,11 +49,15 @@ class VnicTest(object):
                 os.system("rm -f /home/qemu/vhost_net.log")
 
             if(ndebug == True):
+                print('start replace. . .')
                 self.replace()
 
-            # os.system("rmmod vhost_net")
+            os.system("rmmod vhost_net")
+            print("Please start vm. . .")
             print time.time()
-            # time.sleep(60*5)
+            for i in range(5):
+                print(i)
+                time.sleep(60)
             print time.time()
             return True
         else:
@@ -112,8 +116,10 @@ class VnicTest(object):
 
             file = open('/home/qemu/vhost_net.log', 'r')
             str = file.read()
-            htmlstr = re.findall(r'GET.+?keep-alive', str, re.S)
-
+            # 获取所有请求头
+            htmlstr = re.findall(r'GET.+?\r\n\r\n', str, re.S)
+            for item in htmlstr:
+                print item
             if len(htmlstr) >= 1:
                 report = {
                     "brief": str,
@@ -148,7 +154,6 @@ class VnicTest(object):
         self.shutdown()
         # 由于 shutdown 会关闭所有的虚拟机进程，所以模块以一定可以卸载
         os.system("rmmod vhost_net")
-
         #########################################
         if(ndebug == True):
             self.disreplace()
@@ -172,7 +177,7 @@ class VnicTest(object):
 
 
 if __name__ == "__main__":
-    vc = VnicTest('qemu-kvm', 'vhost');
+    vc = VnicTest('qemu-kvm', 'vhost')
     # vc.begin()
     # vc.stop()
     report = vc.deal_hexdump()

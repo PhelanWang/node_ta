@@ -65,8 +65,8 @@ def mmount_test(subtask_id, args):
 # Execute this while run this agent file directly
 if not is_load_external():
     # Run agent
-    # args = {}
-    # args["path"] = '/root/share/c3d4181e-bfda-4c78-bfb6-d7205959db02'
-    # args["name"]  = 'c3d4181e-bfda-4c78-bfb6-d7205959db02'
-    # mmount_test(0, args)
-    agent.run()
+    args = {}
+    args["path"] = '/root/data/c17495b5-e94c-4df7-aeee-ac1c788df145/images/627b8e93-cf19-486c-aa4b-91000818b459/26bc6f9f-4b4f-4123-9442-35d624deeb5d'
+    args["name"]  = '26bc6f9f-4b4f-4123-9442-35d624deeb5d'
+    mmount_test(0, args)
+    # agent.run()

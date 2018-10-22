@@ -27,6 +27,7 @@ def vnic_analysis(subtask_id, args):
     #shut down all vms !!
     type = "未能旁路此网卡数据"
     try:
+        # 关闭所有虚拟机
         vt.shutdown()
         if True == vt.begin():
                 #time.sleep(60)
@@ -37,19 +38,18 @@ def vnic_analysis(subtask_id, args):
         rpt["detail"]= "未能旁路此网卡数据"
         type = 'date '
     
-    print 'type: ', type, 'rpt: ', rpt['brief'], rpt['detail']
+    print rpt['detail']
     agent.post_report(subtask_id,
                       severity=1,
                       result=1,
                       brief=rpt["brief"],
                       detail=rpt["detail"],
                       json_data={'vnic_result':type})
-    
     #print 'end vnic'
     
 # Execute this while run this agent file directly
 if not is_load_external():
-    # print vnic_analysis(0, 0)
+    print vnic_analysis(0, 0)
     # Run agent
-    agent.run()
+    # agent.run()
     

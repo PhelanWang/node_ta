@@ -131,18 +131,13 @@ def my_vdisk_scan(subtask_id, args):
 # Execute this while run this agent file directly
 if not is_load_external():
     args = {}
-    args["path"] = '/root/share/c3d4181e-bfda-4c78-bfb6-d7205959db02'
-    args["name"]  = 'c3d4181e-bfda-4c78-bfb6-d7205959db02'
-#     print 'report: ', my_disk_scan(0, {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
-#     my_erase_scan(0, {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
+    args["path"] = '/root/data/c17495b5-e94c-4df7-aeee-ac1c788df145/images/0336d756-65ab-4d08-bc47-119b22e9fd81/46be86ca-d272-46e1-a982-6884d9ec451f'
+    args["name"]  = '46be86ca-d272-46e1-a982-6884d9ec451f'
 
-#     my_erase_save(0, {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
-#     my_disk_scan(0, args)
-#     my_erase_scan(0, args)
-#     my_cross_memory(0, 0)
-#     my_vdisk_scan(0, args)
-    # Run agent
+    my_disk_scan(0, args)
+    # my_erase_scan(0, args)
     # my_cross_memory(0, 0)
-    # my_vdisk_scan(0, 0)
-    agent.run()
+    # my_vdisk_scan(0, args)
+    # Run agent
+    # agent.run()
 
