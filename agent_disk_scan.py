@@ -18,26 +18,31 @@ if not is_load_external():
 # OK
 # 扫描磁盘，并比较关键字，检测磁盘是否加密
 # nfs 镜像文件路径
+# 格式检测完成
 # args {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
 @agent.entry("disk_scan", version="1.0.2")
 def my_disk_scan(subtask_id,args):
     from sec_storage.disk_scan import get_vm_disk_size,symbol_scan
     print 'startup disk_scan'
-
     vm_disk_path = args["path"]
     vm_disk_size=int(get_vm_disk_size(vm_disk_path))
     print vm_disk_size
     report = symbol_scan(vm_disk_path, vm_disk_size)
     print 'report :', report
-    if report == "ERROR,扫描出现未指定错误" or report == "ERROR!无法获取磁盘空间信息":
-        agent.post_failure(subtask_id)
+
+    if report == "磁盘错误, 扫描出现未指定错误!" or report == "磁盘错误, 无法获取磁盘空间信息!":
+        detail = report
     else:
-        agent.post_report(subtask_id,
-                          severity=1,
-                          result=0,
-                          brief='result of disk_scan',
-                          detail=report["result"],
-                          json_data={'detail_report': report["detail"]})
+        detail = report['result']
+        report = report['detail']
+
+    print detail
+    agent.post_report(subtask_id,
+                      severity=1,
+                      result=0,
+                      brief='result of disk_scan',
+                      detail=detail,
+                      json_data=report)
 
 # OK
 # 删除文件，并检测是否擦除
@@ -126,17 +131,19 @@ def my_vdisk_scan(subtask_id, args):
     #                     severity = 1,
     #                     result = 0,
     #                     brief = 'done',
-    #                     detail = data)
+    #        cc             detail = data)
 
 # Execute this while run this agent file directly
 if not is_load_external():
     args = {}
-    args["path"] = '/root/data/c17495b5-e94c-4df7-aeee-ac1c788df145/images/0336d756-65ab-4d08-bc47-119b22e9fd81/46be86ca-d272-46e1-a982-6884d9ec451f'
-    args["name"]  = '46be86ca-d272-46e1-a982-6884d9ec451f'
+    # args["path"] = '/root/PycharmProjects/1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    # args["name"] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
 
-    my_disk_scan(0, args)
+    args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    # my_disk_scan(0, args)
     # my_erase_scan(0, args)
-    # my_cross_memory(0, 0)
+    my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent
     # agent.run()
