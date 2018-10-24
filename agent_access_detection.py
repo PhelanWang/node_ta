@@ -34,9 +34,9 @@ def host_access_controll_detection(subtask_id, args):
 # 虚拟机访问控制检测
 @agent.entry("vm_access_detection", version="1.0.1")
 def vm_access_controller_detection(subtask_id, args):
-    from access_detection.vm_access_controll_detection import list_access_controll
-    list_access_controll(args)
-
+    from access_detection.vm_access_controll_detection import list_access_controll, get_vm_infor
+    # list_access_controll(args)
+    get_vm_infor(args)
 
 # Execute this while run this agent file directly
 if not is_load_external():
