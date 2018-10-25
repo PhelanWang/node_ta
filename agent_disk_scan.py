@@ -31,7 +31,7 @@ def my_disk_scan(subtask_id,args):
     print 'report :', report
 
     if report == "磁盘错误, 扫描出现未指定错误!" or report == "磁盘错误, 无法获取磁盘空间信息!":
-        detail = report
+        detail = report + "请检测磁盘路径是否正确。"
     else:
         detail = report['result']
         report = report['detail']
@@ -136,14 +136,14 @@ def my_vdisk_scan(subtask_id, args):
 # Execute this while run this agent file directly
 if not is_load_external():
     args = {}
-    # args["path"] = '/root/PycharmProjects/1fe0032b-aabd-4315-8390-6bbac5844ea5'
-    # args["name"] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    args["path"] = '/root/PycharmProjects/cp/1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    args["name"] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
 
-    args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
-    args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    # args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # my_disk_scan(0, args)
     # my_erase_scan(0, args)
-    my_cross_memory(0, 0)
+    # my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent
     # agent.run()
