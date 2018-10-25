@@ -108,14 +108,27 @@ def my_erase_save(subtask_id,args):
 
 @agent.entry("cross_memory", version="1.0.1")
 def my_cross_memory(subtask_id, args):
+    import os
     from memory_scan.memory_cross import memory_scan
-    report = memory_scan()
-    print 'report: ', report
+    (report, state) = memory_scan()
+    if not state:
+        detail = '运行测试功能失败!'
+    else:
+        detail = '运行测试功能成功!'
+        if report == []:
+            detail += '\n未发现交叉内存页面!'
+        else:
+            detail += '\n发现交叉内存页面，显示部分交叉页面地址如下:\n' \
+                      '若要显示所有交叉的内存页面地址，查看节点上文件，路径为：' + os.getcwd() + '/memory_scan_umuery/v_result'
+
+
+    print detail, '\n', report
     agent.post_report(subtask_id,
                         severity = 1,
                         result = 0,
                         brief = 'done',
-                        detail = report)
+                        detail = detail,
+                        json_data=report)
 
 
 @agent.entry("virtual_disk_scan", version="1.0.1")
@@ -143,7 +156,7 @@ if not is_load_external():
     # args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # my_disk_scan(0, args)
     # my_erase_scan(0, args)
-    # my_cross_memory(0, 0)
+    my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent
     # agent.run()

@@ -17,7 +17,7 @@
 #define BUF_LEN 100
 
 static int pid_from_user = 0;
-static char *log_file = "/home/my_kernel_log_test";
+static char *log_file = "/home/qemu/my_kernel_log_test"; // 默认路径
 static int get_walk_page_status = 0;
 static struct file *log_file_struct = NULL;
 static mm_segment_t old_fs;
@@ -62,14 +62,14 @@ static int __init test_init(void){
         return 0;
     }
     #if 0
-    printk("Basic information:");
-    printk("total_vm = 0x%p, locked_vm = 0x%p, shared_vm = 0x%p, exec_vm = 0x%p\n", my_mm->total_vm, my_mm->locked_vm, my_mm->shared_vm, my_mm->exec_vm);
-    printk("stack_vm = 0x%p, reserved_vm = 0x%p, def_flags = 0x%p, nr_ptes = 0x%p\n", my_mm->stack_vm, my_mm->reserved_vm, my_mm->def_flags, my_mm->nr_ptes);
-    printk("start_code = 0x%p, end_code = 0x%p, start_data = 0x%p, end_data = 0x%p\n", my_mm->start_code, my_mm->end_code, my_mm->start_data, my_mm->end_data);
-    printk("start_brk = 0x%p, brk = 0x%p, start_stack = 0x%p\n", my_mm->start_brk, my_mm->brk, my_mm->start_stack);
-    printk("arg_start = 0x%p, arg_end = 0x%p, env_start = 0x%p, env_end = 0x%p\n", my_mm->arg_start, my_mm->arg_end, my_mm->env_start, my_mm->env_end);
+        printk("Basic information:");
+        printk("total_vm = 0x%p, locked_vm = 0x%p, shared_vm = 0x%p, exec_vm = 0x%p\n", my_mm->total_vm, my_mm->locked_vm, my_mm->shared_vm, my_mm->exec_vm);
+        printk("stack_vm = 0x%p, reserved_vm = 0x%p, def_flags = 0x%p, nr_ptes = 0x%p\n", my_mm->stack_vm, my_mm->reserved_vm, my_mm->def_flags, my_mm->nr_ptes);
+        printk("start_code = 0x%p, end_code = 0x%p, start_data = 0x%p, end_data = 0x%p\n", my_mm->start_code, my_mm->end_code, my_mm->start_data, my_mm->end_data);
+        printk("start_brk = 0x%p, brk = 0x%p, start_stack = 0x%p\n", my_mm->start_brk, my_mm->brk, my_mm->start_stack);
+        printk("arg_start = 0x%p, arg_end = 0x%p, env_start = 0x%p, env_end = 0x%p\n", my_mm->arg_start, my_mm->arg_end, my_mm->env_start, my_mm->env_end);
     #else
-    memset(my_buf, 0, sizeof(my_buf));
+       memset(my_buf, 0, sizeof(my_buf));
     #endif
     tmp = my_vm_area;
     while (tmp != NULL) {
@@ -150,7 +150,7 @@ unsigned long my_find_phyaddr(struct mm_struct *my_mm, unsigned long my_va, int 
 }
 
 static int log_to_file(struct file *my_file, char *buf, unsigned int buf_len) {
-    my_file->f_op->write(my_file, buf, strlen(buf),&my_file->f_pos);
+    my_file->f_op->write(my_file, buf, strlen(buf), &my_file->f_pos);
     return 0;
 }
 
