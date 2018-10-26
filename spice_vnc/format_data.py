@@ -10,7 +10,7 @@ def get_format_data(data, count):
         item_data = {}
         split_line = data_list[index].split(' ')
         item_data['encryptedId'] = split_line[0]
-        item_data['encryptedData'] = ' '.join(split_line[1:19])
+        item_data['encryptedData'] = ' '.join(split_line[2:19])
         item_data['decryptedData'] = ' '.join(split_line[20:])
         content.append(item_data)
     return content

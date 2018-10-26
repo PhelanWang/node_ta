@@ -1,3 +1,4 @@
+# coding: utf-8
 from time import sleep
 __author__ = 'Henry'
 # Determine whether loaded by agent_loader
@@ -20,10 +21,11 @@ def vnc(subtask_id, args):
     # Post report to switch server:
     # agent.post_report(subtask_id, severity, result, brief, detail, json_data)
     import os,time,ConfigParser
+    from spice_vnc.format_data import get_format_data
     conf=ConfigParser.ConfigParser()
     conf.read('spice_vnc.conf')
-    port=conf.get('VNC', 'port','5900')
-    cmd='tshark -i any -n -f \"src port '+port+'\" -d \"tcp.port=='+port+',vnc\" -a duration:120 -w vnc.cap'
+    port=conf.get('VNC', 'port', '6080')
+    cmd='tshark -i any -n -f "src port '+port+'" -d "tcp.port=='+port+',vnc" -a duration:120 -w vnc.cap'
     print 'please wait 2 mins,spice is testing...'
     print cmd
     os.system(cmd)
@@ -40,13 +42,15 @@ def vnc(subtask_id, args):
     #print result
     os.system('rm -rf vnc.cap')
     # json_data is default as None
-    print result
+    result = get_format_data(result)
+    for item in result:
+        print item
     agent.post_report(subtask_id,
                       severity=0,
                       result=1,
-                      brief='vnc',
-                      detail=u'vnc',
-                      json_data={'result': str(result)[100:15000]})
+                      brief='VNC',
+                      detail='获取VNC协议的数据内容，若有明文，则可能部分数据未加密!\n',
+                      json_data=result)
 
 # Execute this while run this agent file directly
 if not is_load_external():
