@@ -19,8 +19,8 @@ def vnic_analysis(subtask_id, args):
     from vnic.vnic_analy import VnicTest
     print "vnic test shell run!"
     rpt = {
-            "detail": "未能旁路此网卡数据，请按照步骤操作!",
-            "result": "未能旁路此网卡数据，请按照步骤操作!"
+            "detail": "未能旁路此网卡数据，请按照测试步骤操作!",
+            "result": "未能旁路此网卡数据，请按照测试步骤操作!"
         }
     vt = VnicTest('qemu-kvm', 'vhost')
     try:
@@ -39,8 +39,7 @@ def vnic_analysis(subtask_id, args):
                       brief=None,
                       detail=rpt['detail'],
                       json_data=rpt['result'])
-    #print 'end vnic'
-    
+
 # Execute this while run this agent file directly
 if not is_load_external():
     vnic_analysis(0, 0)
