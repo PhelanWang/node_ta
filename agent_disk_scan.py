@@ -47,9 +47,10 @@ def my_disk_scan(subtask_id,args):
 # OK
 # 删除文件，并检测是否擦除
 # args {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
+# 格式修改完成
 @agent.entry("erase_scan", version="1.0.2")
 def my_erase_scan(subtask_id, args):
-    from sec_storage.disk_erase_detect import get_total_save,do_erase_scan
+    from sec_storage.disk_erase_detect import get_total_save, do_erase_scan
     import os
 
     print 'startup erase_scan'
@@ -65,26 +66,27 @@ def my_erase_scan(subtask_id, args):
                           severity=1,
                           result=0,
                           brief='result of erase_scan',
-                          detail='Failed!',
-                          json_data={'detail_report': 'Disk status error!'})
+                          detail='进行磁盘扫描失败。\n',
+                          json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n")
         return    
     report = do_erase_scan()
-    
-    print 'report: ', report
-    if report == "ERROR":
+    print report
+
+    if report == None:
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
                           brief='result of erase_scan',
-                          detail='Failed!',
-                          json_data={'detail_report': 'Disk status error!'})
+                          detail='进行磁盘扫描失败。\n',
+                          json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n")
     else:
+        print report['result'], report['detail']
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
                           brief='result of erase_scan',
-                          detail=report["result"],
-                          json_data={'detail_report': report["detail"]})
+                          detail=report['detail'],
+                          json_data=report['result'])
  
 # OK   
 # 保存文件大小到文件中   
@@ -105,7 +107,7 @@ def my_erase_save(subtask_id,args):
                           brief='done',
                           detail="save info succeed")
 
-
+# 格式修改完成
 @agent.entry("cross_memory", version="1.0.1")
 def my_cross_memory(subtask_id, args):
     import os
@@ -120,8 +122,6 @@ def my_cross_memory(subtask_id, args):
         else:
             detail += '\n发现交叉内存页面，显示部分交叉页面地址如下:\n' \
                       '若要显示所有交叉的内存页面地址，查看节点上文件，路径为：' + os.getcwd() + '/memory_scan_umuery/v_result'
-
-
     print detail, '\n', report
     agent.post_report(subtask_id,
                         severity = 1,
@@ -130,21 +130,25 @@ def my_cross_memory(subtask_id, args):
                         detail = detail,
                         json_data=report)
 
-
+# 格式修改完成
 @agent.entry("virtual_disk_scan", version="1.0.1")
 def my_vdisk_scan(subtask_id, args):
     from vdisk.vdis_scan import virtual_disk_scan
 
     args = {}
-    args['keyword'] = 'Hello'
+    args['keyword'] = ['ovirt-test', 'cloud-platforms', 'virtual-scan', 'data-isolate']
 
     data = virtual_disk_scan(args)
+
+    detail = '启动虚拟机后在任意文件中写入内容，如果如果内容中有' + reduce(lambda a, b: a+', '+b, args['keyword'], '') + \
+             '等关键字，测试功能将会把相关的数据旁路出来。'
     print data
-    # agent.post_report(subtask_id,
-    #                     severity = 1,
-    #                     result = 0,
-    #                     brief = 'done',
-    #        cc             detail = data)
+    agent.post_report(subtask_id,
+                      severity=1,
+                      result=0,
+                      brief='done',
+                      detail=data,
+                      json_data=data)
 
 # Execute this while run this agent file directly
 if not is_load_external():
@@ -155,8 +159,8 @@ if not is_load_external():
     # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # my_disk_scan(0, args)
-    # my_erase_scan(0, args)
-    my_cross_memory(0, 0)
+    my_erase_scan(0, args)
+    # my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent
     # agent.run()
