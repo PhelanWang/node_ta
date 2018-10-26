@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
 __author__ = 'root'
 import time
 
@@ -19,37 +19,32 @@ def vnic_analysis(subtask_id, args):
     from vnic.vnic_analy import VnicTest
     print "vnic test shell run!"
     rpt = {
-            "brief":"未能旁路此网卡数据",
-            "detail":"未能旁路此网卡数据"
+            "detail": "未能旁路此网卡数据，请按照步骤操作!",
+            "result": "未能旁路此网卡数据，请按照步骤操作!"
         }
     vt = VnicTest('qemu-kvm', 'vhost')
-    ###
-    #shut down all vms !!
-    type = "未能旁路此网卡数据"
     try:
-        # 关闭所有虚拟机
+        # 关闭所有虚拟机进程
         vt.shutdown()
-        if True == vt.begin():
-                #time.sleep(60)
-                rpt = vt.stop()
-                type = "数据已旁路"
+        if vt.begin():
+            rpt = vt.stop()
     except:
-        rpt["brief"] = "未能旁路此网卡数据"
-        rpt["detail"]= "未能旁路此网卡数据"
-        type = 'date '
-    
+        rpt["brief"] = "未能旁路此网卡数据，测试时出现位置错误，请重新运行测试功能!\n"
+        rpt["result"]= "未能旁路此网卡数据，测试时出现位置错误，请重新运行测试功能!\n"
     print rpt['detail']
+    print rpt['result']
+    return
     agent.post_report(subtask_id,
                       severity=1,
                       result=1,
-                      brief=rpt["brief"],
-                      detail=rpt["detail"],
-                      json_data={'vnic_result':type})
+                      brief=None,
+                      detail=rpt['detail'],
+                      json_data=rpt['result'])
     #print 'end vnic'
     
 # Execute this while run this agent file directly
 if not is_load_external():
-    print vnic_analysis(0, 0)
+    vnic_analysis(0, 0)
     # Run agent
     # agent.run()
     
