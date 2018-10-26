@@ -22,17 +22,14 @@ def get_mount_point():
     info = os.popen('df -hl %s' % disk_belong_root_dic).read().split('\n')
     mount_info = info[1].split(' ')
     mount_point = mount_info[0]
+    print mount_point
     return mount_point
 
-
+# 提取出磁盘路径
 def get_disk_dir(disk_path):
     if disk_path == '':
         return ''
-    for i in range(-1, -len(disk_path), -1):
-        if disk_path[i] == '/':
-            vm_disk_dir = disk_path[:i]
-            break
-
+    vm_disk_dir = '/'.join(disk_path.split('/')[:-1])
     return vm_disk_dir
 
 
@@ -53,21 +50,23 @@ def get_target_disk_path(vm_disk_dir):
 
 
 def get_file_root_node_list(vm_disk_path_list):
+    # -i或--inode 显示文件或目录的inode编号
     root_node_list = []
     for i in range(0, len(vm_disk_path_list)):
         info = os.popen('ls -ila %s' % vm_disk_path_list[i]).read().split(' ')
         root_node_list.append(info[0])
-
     return root_node_list
-
 
 def get_block_list(node):
     node_info = os.popen("xfs_db -c 'inode %s' -c p -r %s" % (node, get_mount_point())).read().split('\n')
     core_format = node_info[3][14]
-    # 获取挂载点信息，core.format磁盘格式
+    # 获取挂载点信息，core.format磁盘格式编号
     dict_block = {}
     if core_format == '2':
-        a = node_info[43].split(':')
+        # a = node_info[43].split(':')
+        'u3.bmx[0] = [startoff,startblock,blockcount,extentflag] 0:[0,12795075,10,0]'
+        a = node_info[51].split(':')
+        'core.nextents = 1'
         extent_num_recs = node_info[20][16:]
         for i in range(0, int(extent_num_recs)):
             b = a[i + 1].split(',')
@@ -121,8 +120,8 @@ def get_scan_block(block, num):
 
 
 def block_compare(block):
-    block_info_after = os.popen("xfs_db -c 'fsblock %s' -c 'type text' -c p -r %s" % (block, get_mount_point())).read()
-    block_info_before = os.popen('cat /tmp/cloud_erase_test/%s' % block).read()
+    block_info_after = os.popen("xfs_db -c 'fsblock %s' -c 'type text' -c p -r %s" % (block, get_mount_point())).read() # 删除之后的块内容
+    block_info_before = os.popen('cat /tmp/cloud_erase_test/%s' % block).read() # 删除之前的块内容
     if cmp(block_info_before, block_info_after) == 0:
         os.system('rm -rf /tmp/cloud_erase_test/%s' % block)
         return True
@@ -141,16 +140,23 @@ def block_record(dict_block):
         os.system('mkdir /tmp/cloud_erase_test')
     r = open('/tmp/cloud_erase_test/list', 'a+')
     a = 0
+    # dict_block中key表示磁盘起始块，dick_block表示块数目
     for key in dict_block:
-        scan_block = get_scan_block(key, dict_block[key])
-            #保存到文件中 挂在点到文件中
-        block_save(scan_block)
-        r.write(str(scan_block) + '\n')
-        a += 1
-        print scan_block
-        print a
-        if a == 10:
-            break
+        # 随机选3个磁盘块进行扫描
+        for count in range(0, min(3, int(dict_block[key]))):
+            # 随机获取一个磁盘块
+            scan_block = get_scan_block(key, dict_block[key])
+            # 保存到文件中 挂在点到文件中
+            # 导出磁盘块内容到磁盘块对应节点ID文件的中
+            block_save(scan_block)
+            print scan_block
+            r.write(str(scan_block) + '\n')
+
+        # a += 1
+        # print scan_block
+        # print a
+        # if a == 10:
+        #     break
 
     r.close()
 
@@ -177,25 +183,25 @@ def get_total_save(disk_path):
 
 
 def do_erase_scan():
-    detail = "<font size='5'>start erase scanning:</font>"
+    detail = "开始磁盘擦除扫描:\n"
     is_erased = False
     s = os.popen('cat /tmp/cloud_erase_test/list').read().split('\n')[0:-1]
     for item in s:
-        i = block_compare(item)
-        detail += '<br>block ' + str(s.index(item) + 1)
-        detail += '<br>' + item
-        if i:
-            detail += '<br>matching succeed'
+        is_same = block_compare(item)
+        detail += '扫描磁盘删除后的第 ' + str(s.index(item) + 1) + ' 个磁盘块:\n'
+        detail += '磁盘块编号为: ' + item + ' \n'
+        if is_same:
+            detail += '扫描完成，该块在磁盘删除后内容和删除之前的内容相同。\n'
         else:
             is_erased = True
-            detail += '<br>matching failed'
+            detail += '扫描完成，该块在磁盘删除后内容和删除之前的内容不相同。\n'
             break
 
-    if is_erased:
-        result = 'the disk is ERASED'
+    if not is_erased:
+        result = '找到磁盘删除前后，内容相同的磁盘块，磁盘未完全擦除。\n'
     else:
-        result = 'the disk is NOT ERASED'
-        return {'result': result, 'detail': detail}
+        result = '未找到磁盘删除前后，内容相同的磁盘块，磁盘已经完全擦除。\n'
+    return {'result': detail, 'detail': result}
 
 
 if __name__ == '__main__':

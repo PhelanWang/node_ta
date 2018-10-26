@@ -69,6 +69,8 @@ def my_quick_libvirtflaw_scan(subtask_id, args):
         detail = '在此系统中没有发现libvirt漏洞'
     else:
         detail = 'libvirt漏洞：根据系统环境，扫描系统列出系统中可能存在的libvirt漏洞'
+
+
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
@@ -89,6 +91,7 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
         detail = '在此系统中没有发现VDSM漏洞'
     else:
         detail = 'VDSM漏洞：根据系统环境，扫描系统列出系统中可能存在的VDSM漏洞'
+
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
@@ -102,9 +105,9 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
 if not is_load_external():
     # my_quick_VDSMflaw_scan(0, 0)
     # my_quick_libvirtflaw_scan(0, 0)
-    # my_quick_ovirtflaw_scan(0, 0)
+    my_quick_ovirtflaw_scan(0, 0)
     # my_quick_kvmflaw_scan(0, 0)
     # Run agent
-    agent.run()
+    # agent.run()
 
 # 格式修改完成

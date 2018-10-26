@@ -28,9 +28,8 @@ def getFlawInfoBySql(sql):
     #tes =  pro.find(",")
     #print tes
     if(pro.find(",")>=0):
-
         #多个产品,取出产品版本,多个产品时qemu版本未指定的情况未检测
-        s = "漏洞名称：%s \n" % row[2].replace('\n','')+ "漏洞信息：%s \n" % row[4].replace('\n','')
+        s = {'bugName': "%s \n" % row[2].replace('\n', ''), 'bugInfo': "%s \n" % row[4].replace('\n', '')}
         inlist.append(s)
         #fit the flaw
         prol = pro.split(",")
@@ -39,24 +38,22 @@ def getFlawInfoBySql(sql):
             for key in versions:
                 if(prol[i]==key):
                     if(verl[i].find(versions.get(key))>=0):
-                        sfit = "漏洞名称：%s \n" % row[2].replace('\n','')+ "漏洞信息：%s \n" % row[4].replace('\n','')
+                        sfit = {'bugName': "%s \n" % row[2].replace('\n', ''), 'bugInfo': "%s \n" % row[4].replace('\n', '')}
                         fitinlist.append(sfit)
-                              
-                                    
-                        
+
     if(pro.find(",")<0):
         '''#单个产品 huozhe chanping yilan wei "null"
         if(pro=="null"):
-              s = "漏洞名称：%s \n" % row[2].replace('\n','')+ "漏洞信息：%s \n" % row[4].replace('\n','')
+              s = {'bugName': "%s \n" % row[2].replace('\n', ''), 'bugInfo': "%s \n" % row[4].replace('\n', '')}
               inlist.append(s)
         else:
-              s = "漏洞名称：%s \n" % row[2].replace('\n','')+ "漏洞信息：%s \n" % row[4].replace('\n','')
+              s = {'bugName': "%s \n" % row[2].replace('\n', ''), 'bugInfo': "%s \n" % row[4].replace('\n', '')}
               inlist.append(s)'''
         #fit the flaw
         for key in versions:
                 if(pro==key):
                     if(ver.find(versions.get(key))>=0):
-                        sfit = "漏洞名称：%s \n" % row[2].replace('\n','')+ "漏洞信息：%s \n" % row[4].replace('\n','')
+                        sfit = {'bugName': "%s \n" % row[2].replace('\n', ''), 'bugInfo': "%s \n" % row[4].replace('\n', '')}
                         fitinlist.append(sfit)
                             
                               #####
@@ -74,13 +71,13 @@ def getFlawInfoBySql(sql):
     row = cur.fetchone()
     if(row==None):
         break
-    sfit = "漏洞名称：%s \n" % row[2].replace('\n','')+ "漏洞信息：%s \n" % row[4].replace('\n','')
+    sfit = {'bugName': "%s \n" % row[2].replace('\n', ''), 'bugInfo': "%s \n" % row[4].replace('\n', '')}
     fitinlist.append(sfit)
   cur.close()
   con.close()
   #con.clo###
   if not fitinlist:
-    return ['没有发现漏洞']
+    return []
   return fitinlist
 
 

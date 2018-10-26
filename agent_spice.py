@@ -18,11 +18,11 @@ if not is_load_external():
 def spice(subtask_id, args):
     # Post report to switch server:
     # agent.post_report(subtask_id, severity, result, brief, detail, json_data)
-    import os,time,ConfigParser
-    conf=ConfigParser.ConfigParser()
+    import os, time, ConfigParser
+    conf = ConfigParser.ConfigParser()
     conf.read('spice_vnc.conf')
-    port=conf.get('SPICE', 'port','5900')
-    cmd='tshark -i any -n -f \"src port '+port+'\" -d \"tcp.port=='+port+',vnc\" -a duration:120 -w data.cap'
+    port = conf.get('SPICE', 'port', '5900')
+    cmd = 'tshark -i any -n -f \"src port '+port+'\" -d \"tcp.port=='+port+',vnc\" -a duration:120 -w data.cap'
     print 'please wait 2 mins,spice is testing...'
     print cmd
     os.system(cmd)
@@ -33,8 +33,8 @@ def spice(subtask_id, args):
     print 'begin to anaylyse...'
     #os.system('chmod 777 data.cap')
     #result=os.popen('hexdump -C data.cap')
-    file=open('spice.txt')
-    result=file.read()
+    file = open('spice.txt')
+    result = file.read()
     file.close()
     #print result
     os.system('rm -rf data.cap')

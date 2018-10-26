@@ -58,7 +58,7 @@ def my_erase_scan(subtask_id, args):
     disk_path = args["path"]
     result = get_total_save(disk_path)
     
-    os.system('rm -rf '+disk_path)
+    # os.system('rm -rf '+disk_path)
     
     print 'result: ', result
     if result == "ERROR":
@@ -159,7 +159,7 @@ if not is_load_external():
     # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # my_disk_scan(0, args)
-    my_erase_scan(0, args)
+    # my_erase_scan(0, args)
     # my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent

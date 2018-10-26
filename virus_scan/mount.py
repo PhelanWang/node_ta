@@ -20,59 +20,52 @@ class Mounter(object):
         self.img_path = img_path
         self.os_name = os_name
 
-
     def killid(self):
-        
         pid_str = " ps -ef |grep qemu-kvm |grep -v grep |grep kristen|awk '{print $2}'"
         print pid_str
         pidlist = os.popen(pid_str).read().strip().split('\n')
         print 'pidlist'
         print (pidlist)
-
         for pid in pidlist:
-            if pid =='':
+            if pid == '':
                 pass
-            else :
-                strs="kill -9 %s"%(pid)
+            else:
+                strs = "kill -9 %s" % (pid)
                 print strs
                 os.system(strs)
 
-
-
     def check_available(self):
-        rpt =""
+        rpt = ""
         self.killid()
         str_size = "qemu-img info %s | grep disk |cut -d ' ' -f 3  |grep K" % self.img_path
         print str_size
         size = os.popen(str_size).read().strip()
-        if(size==''):
+        if size == '':
             print "disk check ok"
             return True
         else:
             print "can not mount!"
             return False
+
     def mount(self):
         check_disk = self.check_available()
-        if check_disk ==False:
-            return check_disk
+        if check_disk == False:
+            return False
         else:
             print 'create thread start'
             t1=startvm(self.img_path,name='kristen01')
             t2=startvm(self.img_path,name='kristen02')
             t1.start()
             t2.start()
-
-
             print 'create thread end'
             return True
 
     def getReport(self):
         flag = self.mount()
-        if(flag==False):
+        if not flag:
             return False
-        elif flag ==True:
-            #pslist=os.popen('ps -aux | grep')
-            try :
+        elif flag:
+            try:
                 pid1=os.popen("ps -ef |grep -v grep |grep qemu-kvm |grep kristen01|awk {'print $2'}").read().strip('\n')
                 print 'pid1',pid1
                 pid2=os.popen("ps -ef |grep -v grep |grep qemu-kvm |grep kristen02|awk {'print $2'}").read().strip('\n')
@@ -82,21 +75,23 @@ class Mounter(object):
                 port2 = os.popen("netstat -ntpl |grep  "+pid2+" |grep qemu-kvm |awk '{print $4}' |cut -d ':' -f 4" ).read()
                 
                 port1 = port1.strip('\n')
-                rst = "start vm1"
+                rst = "对镜像启动第一个虚拟机 vm1"
                 if port1 != '':
-                    rst += " success, VNC server running on %s. " % str(port1)
+                    rst += " 启动成功, 虚拟机 VNC 服务运行在端口 %s。 \n" % str(port1)
                 else:
-                    rst += ' failed.'
-                rst = rst +'\nstart vm2'
+                    rst += ' 启动失败。\n'
+                rst = rst + '对镜像启动第一个虚拟机 vm2'
                 if port2 != '':
-                    rst += " success, VNC server running on %s " % str(port2)
+                    rst += " 启动成功, 虚拟机 VNC 服务运行在端口 %s 。\n" % str(port2)
                 else:
-                    rst += ' failed.'
+                    rst += ' 启动失败。\n'
 #                 rst =rst.strip(' ') +"start vm2 , VNC server running on %s" % str(port2)
                 if (port1 == '' and port2 != '') or (port1 != '' and port2 == ''):
-                    rst += '\nCan not multiply mount, image is security.'
+                    rst += '不能够多重挂载该虚拟机镜像, 虚拟机镜像是安全的。'
                 elif port1 != '' and port2 != '':
-                    rst += '\nCan multiply mount, image is not security.'
+                    rst += '能够多重挂载该虚拟机镜像, 虚拟机镜像是不安全的。'
+                elif port1 == '' and port2 == '':
+                    rst += '对指定镜像两个虚拟机都不能够启动，请检查磁盘路径是否正确。'
                 return rst
             except:
                 print "throw exception on start vms "
@@ -104,21 +99,22 @@ class Mounter(object):
             # print 'start vms success with disk listen on port %s'%str(5900)
 
 
-
 class startvm(threading.Thread):
     def __init__(self,path,name):
         threading.Thread.__init__(self,name=name)
         self.path =path
         self.thread_stop=False
-    def  run(self):
+
+    def run(self):
         #while not self.thread_stop:
         print 'start vm'
-        os.system("/usr/libexec/qemu-kvm  -name  %s  -m 2048 %s"%(self.name,self.path))
+        os.system("/usr/libexec/qemu-kvm -name %s -m 2048 %s" % (self.name, self.path))
         #time.sleep(50)
-        print 'Thread  start %s,Time %s \n'%(self.path,time.ctime())
+        print 'Thread  start %s,Time %s \n' % (self.path,time.ctime())
 
     def stop(self):
         self.thread_stop = True
+
     def getpid(self):
         return ctypes.CDLL('libc.so.6').syscall(186)
 '''

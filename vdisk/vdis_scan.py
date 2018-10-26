@@ -83,7 +83,7 @@ def virtual_disk_scan(args):
     replace_qemu_kvm()
 
     print("Please start vm. . .")
-    for i in range(10):
+    for i in range(5):
         print(str(i)+' ')
         # time.sleep(60)
 
@@ -95,7 +95,7 @@ def virtual_disk_scan(args):
 
 
     keywords = args['keyword']
-    m_list = keywords.strip('\n ').split(' ')
+    m_list = keywords
 
     find_key_word(m_list)
 
@@ -106,9 +106,14 @@ def virtual_disk_scan(args):
         file_path = '/home/qemu/' + file_name + '.txt'
         fo = open(file_path, 'r')
         try:
-            data += fo.read() + '\n'
+            file_data = fo.read()
+            if file_data == '':
+                data += '未找到关键字: ' + file_name + ' 相关内容!\n'
+            else:
+                data += '找到关键字: ' + file_name + ' 相关内容如下: '
+                data += file_data + '\n'
         finally:
             fo.close()
-            os.system('rm ' + '/home/qemu/' + file_name + '.txt')
+            # os.system('rm ' + '/home/qemu/' + file_name + '.txt')
     # os.system('rm ' + '/home/qemu/virio_blk.log')
     return data
