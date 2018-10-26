@@ -20,7 +20,7 @@ if not is_load_external():
 # nfs 镜像文件路径
 # 格式检测完成
 # args {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
-@agent.entry("disk_scan", version="1.0.2")
+@agent.entry("disk_scan", version="1.0.1")
 def my_disk_scan(subtask_id,args):
     from sec_storage.disk_scan import get_vm_disk_size,symbol_scan
     print 'startup disk_scan'
@@ -48,7 +48,7 @@ def my_disk_scan(subtask_id,args):
 # 删除文件，并检测是否擦除
 # args {'path': '/root/share/cb7e72a4-b396-4e24-bbb2-717e0bf62e49/images/cdab97a6-da5e-4103-aa24-9d9cf84440e3/7b2465ac-d3b2-4a79-b384-2c73bfb27521'})
 # 格式修改完成
-@agent.entry("erase_scan", version="1.0.2")
+@agent.entry("erase_scan", version="1.0.1")
 def my_erase_scan(subtask_id, args):
     from sec_storage.disk_erase_detect import get_total_save, do_erase_scan
     import os
@@ -91,7 +91,7 @@ def my_erase_scan(subtask_id, args):
 # OK   
 # 保存文件大小到文件中   
 # args {'path': '/root/share/c3d4181e-bfda-4c78-bfb6-d7205959db02'}) 
-@agent.entry("erase_save", version="1.0.2")
+@agent.entry("erase_save", version="1.0.1")
 def my_erase_save(subtask_id,args):
     from sec_storage.disk_erase_detect import get_total_save,do_erase_scan
     disk_path = args["path"]

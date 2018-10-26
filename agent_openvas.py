@@ -16,7 +16,7 @@ if not is_load_external():
 # agent.post_failure(subtask_id='379aba08-4026-11e5-820d-001a4aca7401')
 
 # Register function "my_openvas" on service "openvas"
-@agent.entry("openvas", version="1.1.1")
+@agent.entry("openvas", version="1.0.1")
 def openvas_testcase(subtask_id, args):
     from lib.utility import uuid, print_exception
     from time import sleep

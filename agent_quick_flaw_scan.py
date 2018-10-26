@@ -19,7 +19,7 @@ if not is_load_external():
 # http://192.168.1.117:9000/switch/agent/quick_kvmflaw_scan
 # args = '' or None
 # version = '1.0.2'
-@agent.entry("quick_kvmflaw_scan", version="1.0.2")
+@agent.entry("quick_kvmflaw_scan", version="1.0.1")
 def my_quick_kvmflaw_scan(subtask_id,args):
     from quick_flaw_scan.ShowInfoOfScankvm_flaw import getFlawInfoBySql
     virus_table = "select * from kvm_flaw_scan"
@@ -40,7 +40,7 @@ def my_quick_kvmflaw_scan(subtask_id,args):
 # http://192.168.1.117:9000/switch/agent/quick_ovirtflaw_scan
 # args = '' or None
 # version = '1.0.2'
-@agent.entry("quick_ovirtflaw_scan", version="1.0.2")
+@agent.entry("quick_ovirtflaw_scan", version="1.0.1")
 def my_quick_ovirtflaw_scan(subtask_id,args):
     from quick_flaw_scan.ShowInfoOfScanOvirt_flaw import getFlawInfoBySql
     print 'startup quick_ovirtflaw_scan'
@@ -60,7 +60,7 @@ def my_quick_ovirtflaw_scan(subtask_id,args):
 # http://192.168.1.117:9000/switch/agent/quick_libvirtflaw_scan
 # args = '' or None
 # version = '1.0.2'
-@agent.entry("quick_libvirtflaw_scan", version="1.0.2")
+@agent.entry("quick_libvirtflaw_scan", version="1.0.1")
 def my_quick_libvirtflaw_scan(subtask_id, args):
     from quick_flaw_scan.ShowInfoOfScanlibvirt_flaw import getFlawInfoBySql
     # 此处的report返回一个包含所有libvirt漏洞信息的列表
@@ -83,7 +83,7 @@ def my_quick_libvirtflaw_scan(subtask_id, args):
 # http://192.168.1.117:9000/switch/agent/quick_VDSMflaw_scan
 # args = '' or None
 # version = '1.0.2'
-@agent.entry("quick_VDSMflaw_scan", version="1.0.2")
+@agent.entry("quick_VDSMflaw_scan", version="1.0.1")
 def my_quick_VDSMflaw_scan(subtask_id,args):
     from quick_flaw_scan.ShowInfoOfScanVDSM_flaw import getFlawInfoBySql
     report = getFlawInfoBySql("select * from VDSM_flaw_scan")#此处的report返回一个包含所有VDSM漏洞信息的列表

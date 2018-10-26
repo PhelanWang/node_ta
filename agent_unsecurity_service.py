@@ -18,7 +18,7 @@ if not is_load_external():
 
 # OJBK
 # 没有抓到数据
-@agent.entry("unsecurity_service_testing", version="1.0.2")
+@agent.entry("unsecurity_service_testing", version="1.0.1")
 def my_unsecurity_service_testing(subtask_id,args):
     from lib.agent.ctest import SwitchAgent
     import threading

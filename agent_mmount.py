@@ -21,7 +21,7 @@ if not is_load_external():
 # OK
 # 对于同一个磁盘mount两个会出错，尝试只启动一台
 # 格式修改完成
-@agent.entry("mmount", version="1.0.2")
+@agent.entry("mmount", version="1.0.1")
 def mmount_test(subtask_id, args):
     from virus_scan.mount import Mounter
     disk_path = ''
