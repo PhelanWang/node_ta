@@ -33,7 +33,6 @@ def vnic_analysis(subtask_id, args):
         rpt["result"]= "未能旁路此网卡数据，测试时出现位置错误，请重新运行测试功能!\n"
     print rpt['detail']
     print rpt['result']
-    return
     agent.post_report(subtask_id,
                       severity=1,
                       result=1,
