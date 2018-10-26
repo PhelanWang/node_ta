@@ -13,7 +13,7 @@ if not is_load_external():
     # Create SwitchAgent instance
     agent = SwitchAgent(__name__)
 
-# OJBK
+# 格式修改完成
 @agent.entry("vnic_testing",version="1.0.2")
 def vnic_analysis(subtask_id, args):
     from vnic.vnic_analy import VnicTest
