@@ -21,7 +21,6 @@ def list_access_controll(args):
     mount_disk(args)
     result = os.system('ls -lh /mnt')
     umount_disk()
-    print result
     return result
 
 

@@ -11,7 +11,7 @@ if not is_load_external():
     from lib.agent.ctest import SwitchAgent
 
     # Create SwitchAgent instance
-    agent = SwitchAgent(__name__)
+    agent=SwitchAgent(__name__)
 
 
 # Register function "my_openvas" on service "openvas"
@@ -29,12 +29,12 @@ def my_unsecurity_service_testing(subtask_id,args):
     from sec_network.pyTimer import Pysettimer
 
     # Get value of global K-V database item "engine-ip". see get_global(), set_global()
-    #engine_ip = agent.get_global("engine-ip")
+    #engine_ip=agent.get_global("engine-ip")
 
-#     client = Pysettimer(cli.sendmessage, "Hello World")
+#     client=Pysettimer(cli.sendmessage, "Hello World")
     
     #---\
-    capture = Pysettimer(unsecurity.capture, 'test')
+    capture=Pysettimer(unsecurity.capture, 'test')
     #---/
     
 #     client.setDaemon(True)
@@ -52,32 +52,32 @@ def my_unsecurity_service_testing(subtask_id,args):
     if(unsecurity.get_captured()):
         print unsecurity.getfilterpackupd()
         agent.post_report(subtask_id,
-                          severity = 1,
-                          result = 0,
-                          brief = 'String Match Successful! ',
-                          detail = 'The message send to the server is captured',
-                          json_data = {
+                          severity=1,
+                          result=0,
+                          brief='String Match Successful! ',
+                          detail='The message send to the server is captured',
+                          json_data={
                               "method": "在ovirt云平台的两个node结点上部署两台虚拟机,分别为vm1和vm2,在vm1中部署一个不安全的服务,发送端部署在vm2中,使用wireshark抓包工具,在发送端或者接收端网卡上抓取数据,以验证云平台的安全性",
                               "config": "系统要求:\nfedora19+,centos7.0+（kernel支持kvm）\nwireshark-1.10.13-1.fc20.x86_64,ovirt平台,至少一个node节点，一个虚拟机",
                               "logs": [
                                     {"type": "text", "content": unsecurity.getfilterpackupd()}
                                 ],
-                              "conclusions": [{"type":"text", "content":"The data  is captured."}]
+                              "conclusions": [{"type": "text", "content": "The data  is captured."}]
                           })
     else:
         print 'else'
         agent.post_report(subtask_id,
-                          severity = 1,
-                          result =1 ,
-                          brief = 'String Match failed',
-                          detail = 'The message send to the server cannot captured',
-                          json_data = {
+                          severity=1,
+                          result=1,
+                          brief='String Match failed',
+                          detail='The message send to the server cannot captured',
+                          json_data={
                               "method": "在ovirt云平台的两个node结点上部署两台虚拟机,分别为vm1和vm2,在vm1中部署一个不安全的服务,发送端部署在vm2中,使用wireshark抓包工具,在发送端或者接收端网卡上抓取数据,以验证云平台的安全性",
                               "config": "系统要求:\nfedora19+,centos7.0+（kernel支持kvm）\nwireshark-1.10.13-1.fc20.x86_64,ovirt平台,至少一个node节点，一个虚拟机",
                               "logs": [
                                     {"type": "text", "content":'The data cannot be captured'}
                                 ],
-                              "conclusions": [{"type":"text", "content":"The data cannot be captured"}]
+                              "conclusions": [{"type": "text", "content": "The data cannot be captured"}]
                           })
 
 
