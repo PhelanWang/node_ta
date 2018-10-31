@@ -19,8 +19,9 @@ def modify_to_root():
 
 
 def execute_command(cmd):
-    print cmd
+    # print cmd
     child = pexpect.spawn(cmd)
+    time.sleep(0.5)
     child.sendline('admin')
     child.sendline('admin')
     return child
@@ -28,6 +29,7 @@ def execute_command(cmd):
 
 # 获取虚拟机信息
 def get_info():
+    data = ''
     child = execute_command('virsh list')
     result = child.readlines()[4:-1]
     # result = child.readlines()[2:-1]
@@ -36,17 +38,16 @@ def get_info():
         line_list = list(set(line.strip(' \r\n').split(' ')))
         line_list.sort()
         vms_info.append(line_list)
-        print line_list
 
     for vm_info in vms_info:
         child = execute_command('virsh dommemstat %s' % vm_info[1])
         result = child.readlines()[2:]
-        result = reduce(lambda a, b: a + b, map(lambda s: s.replace('\r\n', '\n'), result), '虚拟机名称: %s\n虚拟机信息:\n' % vm_info[2])
-        print result
-
-    hypervisor_info = 'hypervisor结果如下:\n'
-    hyper_infor = os.popen('free -m').read()
-    print hyper_infor
+        result = reduce(lambda a, b: a + b, map(lambda s: s.replace('\r\n', '\n'), result), '虚拟机名称: %s，虚拟机信息如下:\n' % vm_info[2])
+        data += result.strip('\r\n')+'\n'
+    hyper_infor = 'hypervisor结果如下:\n'
+    hyper_infor += os.popen('free -m').read()
+    data += hyper_infor
+    return data
 
 # 将cirrosx.xml中的IMAGE_PATH替换为正确路径
 def replace_image_path(file_path):
@@ -64,7 +65,6 @@ def replace_image_path(file_path):
     file.seek(0, 0)
     file.truncate()
     file.writelines(lines)
-    print 'replace path ok. . .'
 
 # 启动cirros1和cirros2两台虚拟机
 def start_vms():
@@ -74,18 +74,35 @@ def start_vms():
     execute_command('virsh define %s' % cirros_path+'/cirros2.xml')
     execute_command('virsh start cirros1')
     execute_command('virsh start cirros2')
-    get_info()
 
 
 def end_vms():
     execute_command('virsh undefine cirros1')
     execute_command('virsh undefine cirros2')
 
-replace_image_path('cirros1.xml')
-replace_image_path('cirros2.xml')
-modify_to_root()
-start_vms()
-end_vms()
+def shutdown_all_vm():
+    pids = os.popen('pidof qemu-kvm').read().strip(' \n').split(' ')
+    for pid in pids:
+        os.system('kill -9 %s' % pid)
+
+def shutdown_one_vm():
+    pids = os.popen('pidof qemu-kvm').read().strip(' \n').split(' ')
+    os.system('kill -9 %s' % pids[0])
 
 
+def execute_test():
+    shutdown_all_vm()
+    replace_image_path('cirros1.xml')
+    replace_image_path('cirros2.xml')
+    modify_to_root()
+    start_vms()
+    before_data = get_info()
+    shutdown_one_vm()
+    after_data = get_info()
+    shutdown_one_vm()
+    print before_data
+    print after_data
+    end_vms()
 
+
+execute_test()
