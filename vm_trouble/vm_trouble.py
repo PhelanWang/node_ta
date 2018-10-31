@@ -21,17 +21,18 @@ def modify_to_root():
 def execute_command(cmd):
     # print cmd
     child = pexpect.spawn(cmd)
-    time.sleep(0.5)
+    time.sleep(1)
     child.sendline('admin')
     child.sendline('admin')
-    return child
+    # print child.read()
+    return child.readlines()
 
 
 # 获取虚拟机信息
 def get_info():
     data = ''
-    child = execute_command('virsh list')
-    result = child.readlines()[4:-1]
+    result = execute_command('virsh list')[4:-1]
+    # result = child.readlines()[4:-1]
     # result = child.readlines()[2:-1]
     vms_info = []
     for line in result:
@@ -40,8 +41,8 @@ def get_info():
         vms_info.append(line_list)
 
     for vm_info in vms_info:
-        child = execute_command('virsh dommemstat %s' % vm_info[1])
-        result = child.readlines()[2:]
+        result = execute_command('virsh dommemstat %s' % vm_info[1])[2:]
+        # result = child.readlines()[2:]
         result = reduce(lambda a, b: a + b, map(lambda s: s.replace('\r\n', '\n'), result), '虚拟机名称: %s，虚拟机信息如下:\n' % vm_info[2])
         data += result.strip('\r\n')+'\n'
     hyper_infor = 'hypervisor结果如下:\n'
@@ -103,6 +104,5 @@ def execute_test():
     print before_data
     print after_data
     end_vms()
+    return before_data, after_data
 
-
-execute_test()
