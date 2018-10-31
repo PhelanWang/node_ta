@@ -42,7 +42,7 @@ def vnic_analysis(subtask_id, args):
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    vnic_analysis(0, 0)
+    # vnic_analysis(0, 0)
     # Run agent
-    # agent.run()
+    agent.run()
     
