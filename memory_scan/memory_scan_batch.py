@@ -8,11 +8,11 @@ from memory_scan.memory_quchong import mem_quchong;
 def mem(path,v_id1,v_id2):
     print 'hello'
     #随机获取虚拟机的列表
-    str = os.popen("pidof 'qemu-kvm'").read();     
-    a = str.split("\n");
-    cc=a[0];
-    strq=cc.split(" ");
-    slice=random.sample(strq,2)
+    str = os.popen("pidof 'qemu-kvm'").read()
+    a = str.split("\n")
+    cc=a[0]
+    strq=cc.split(" ")
+    slice=random.sample(strq, 2)
     #v_id1=int(slice[0])
     #v_id2=int(slice[1])
     #

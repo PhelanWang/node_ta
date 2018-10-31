@@ -1,7 +1,7 @@
 # coding: utf-8
 import os
 import pexpect, time
-
+import ConfigParser
 
 # 修改/etc/libvirt/qemu.conf文件，设置根权限
 def modify_to_root():
@@ -21,9 +21,13 @@ def modify_to_root():
 def execute_command(cmd):
     # print cmd
     child = pexpect.spawn(cmd)
-    time.sleep(1)
-    child.sendline('admin')
-    child.sendline('admin')
+    conf = ConfigParser.ConfigParser()
+    conf.read('lib.agent.ctest.conf')
+    username = conf.get('virsh', 'username', 'admin')
+    password = conf.get('virsh', 'password', 'admin')
+    time.sleep(0.1)
+    child.sendline(username)
+    child.sendline(password)
     # print child.read()
     return child.readlines()
 
