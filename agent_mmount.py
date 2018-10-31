@@ -39,6 +39,7 @@ def mmount_test(subtask_id, args):
     # print 'start mounting...'
     # mount = mt.mount()
     report = mt.getReport()
+    mt.killid()
     rpt=''
     detail=''
     brief=''
@@ -72,5 +73,5 @@ if not is_load_external():
     args = {}
     args["path"] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     args["name"] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
-    mmount_test(0, args)
-    # agent.run()
+    # mmount_test(0, args)
+    agent.run()
