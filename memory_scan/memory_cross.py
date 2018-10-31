@@ -131,7 +131,7 @@ def mem_quchong(v_id1, v_id2):
     i = 0
     index = 0
     for line in list2:
-        if line[0] != ',':
+        if '80000' in line:
             i += 1
             content_line = '0x'+line.replace('\n', '\t')
             xieci.writelines(content_line)
