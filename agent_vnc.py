@@ -42,7 +42,7 @@ def vnc(subtask_id, args):
     #print result
     os.system('rm -rf vnc.cap')
     # json_data is default as None
-    result = get_format_data(result)
+    result = get_format_data(result, 15)
     for item in result:
         print item
     agent.post_report(subtask_id,
