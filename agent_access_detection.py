@@ -7,11 +7,8 @@ def is_load_external():
     return globals().has_key('AGENT_LOADER')
 
 
-# Execute this while run this agent file directly
 if not is_load_external():
-    # Import ctest package
     from lib.agent.ctest import SwitchAgent
-    # Create SwitchAgent instance
     agent = SwitchAgent(__name__)
 
 
@@ -21,6 +18,10 @@ def host_access_controll_detection(subtask_id, args):
     # 使用系统命令，列出根目录的文件访问控制权限
     result = os.system('ls -lh /')
     detail = '列出被测试节点的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
+
+    print result
+    print detail
+
     agent.post_report(subtask_id,
                       severity=1,
                       result=0,
@@ -37,7 +38,6 @@ def vm_access_controller_detection(subtask_id, args):
     detail = '列出虚拟机磁盘的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
     print result
     print detail
-    return
 
     agent.post_report(subtask_id,
                       severity=1,
@@ -46,10 +46,11 @@ def vm_access_controller_detection(subtask_id, args):
                       detail=detail,
                       json_data=result)
 
+
 # Execute this while run this agent file directly
 if not is_load_external():
-    args = {}
-    args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
-    vm_access_controller_detection(0, args)
+    # args = {}
+    # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    # vm_access_controller_detection(0, args)
     # host_access_controll_detection(0, args)
-    # agent.run()
+    agent.run()
