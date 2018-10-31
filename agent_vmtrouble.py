@@ -17,41 +17,23 @@ if not is_load_external():
     agent = SwitchAgent(__name__)
 
 
-# 获取虚拟机信息
-def get_info():
-    child = pexpect.spawn('virsh list --all')
-    child.sendline('admin')
-    child.sendline('admin')
-    result = child.readlines()[4:-1]
-    vms_info = []
-    for line in result:
-        line_list = list(set(line.strip(' \r\n').split(' ')))
-        line_list.sort()
-        vms_info.append(line_list)
-        print line_list
-
-    for vm_info in vms_info:
-        child = pexpect.spawn('virsh dommemstat %s' % vm_info[1])
-        child.sendline('admin')
-        child.sendline('admin')
-        result = child.readlines()[2:]
-        result = reduce(lambda a, b: a + b, map(lambda s: s.replace('\r\n', '\n'), result), '虚拟机名称: %s\n虚拟机信息:\n' % vm_info[2])
-        print result
-
-    hypervisor_info = 'hypervisor结果如下:\n'
-    hyper_infor = os.system('free -m')
-    print hyper_infor
-
-
 @agent.entry("blue_screen", version="1.0.1")
-def blue_screen():
-    get_info()
-    print 'start sleep. . .'
-    time.sleep(60)
-    print 'end sleep. . .'
-    get_info()
+def blue_screen(subtask_id, args):
+    from vm_trouble.vm_trouble import execute_test
+    before_data, after_data = execute_test()
+    result = '启动两台虚拟机后，信息如下:\n' + before_data + \
+             '\n一台虚拟机故障后，信息如下:\n' + after_data
 
-
+    print result
+    detail = '测试启动两台虚拟机，获取虚拟机信息，然后模拟一台虚拟机崩溃，再次获取系统信息。\n' \
+             '可以从信息中看到，一台虚拟机故障后不会影响另一台虚拟机的正常运行。\n'
+    print detail
+    agent.post_report(subtask_id,
+                      severity=0,
+                      result=1,
+                      brief='',
+                      detail=detail,
+                      json_data=result)
 
 # Execute this while run this agent file directly
 if not is_load_external():
