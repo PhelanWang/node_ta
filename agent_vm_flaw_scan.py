@@ -33,6 +33,7 @@ def vm_flaw_scan(subtask_id, args):
             if flaw_version and version_comapre(flaw_version[0], version):
                 json_data.append(item)
 
+    print json_data
     agent.post_report(subtask_id,
                       severity=0,
                       result=1,
