@@ -2,8 +2,10 @@
 
 __author__ = 'Henry'
 
+
 def is_load_external():
     return globals().has_key('AGENT_LOADER')
+
 
 # Execute this while run this agent file directly
 if not is_load_external():
@@ -23,13 +25,9 @@ if not is_load_external():
 @agent.entry("disk_scan", version="1.0.1")
 def my_disk_scan(subtask_id,args):
     from sec_storage.disk_scan import get_vm_disk_size,symbol_scan
-    print 'startup disk_scan'
     vm_disk_path = args["path"]
     vm_disk_size=int(get_vm_disk_size(vm_disk_path))
-    print vm_disk_size
     report = symbol_scan(vm_disk_path, vm_disk_size)
-    print 'report :', report
-
     if report == "磁盘错误, 扫描出现未指定错误!" or report == "磁盘错误, 无法获取磁盘空间信息!":
         detail = report + "请检测磁盘路径是否正确。"
     else:
@@ -37,6 +35,7 @@ def my_disk_scan(subtask_id,args):
         report = report['detail']
 
     print detail
+    print report
     agent.post_report(subtask_id,
                       severity=1,
                       result=0,
@@ -153,14 +152,18 @@ def my_vdisk_scan(subtask_id, args):
 # Execute this while run this agent file directly
 if not is_load_external():
     args = {}
-    args["path"] = '/root/PycharmProjects/cp/1fe0032b-aabd-4315-8390-6bbac5844ea5'
-    args["name"] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    # args["path"] = '/root/PycharmProjects/cp/1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    # args["name"] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
 
     # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+
+    args['path'] = '/root/PycharmProjects/1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    args['name'] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
+
     # my_disk_scan(0, args)
     # my_erase_scan(0, args)
-    # my_cross_memory(0, 0)
+    my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent
     # agent.run()
