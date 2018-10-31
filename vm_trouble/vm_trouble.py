@@ -29,10 +29,8 @@ def execute_command(cmd):
 # 获取虚拟机信息
 def get_info():
     child = execute_command('virsh list')
-    for line in child.readlines():
-        print line
-
     result = child.readlines()[4:-1]
+    # result = child.readlines()[2:-1]
     vms_info = []
     for line in result:
         line_list = list(set(line.strip(' \r\n').split(' ')))
@@ -75,16 +73,19 @@ def start_vms():
     execute_command('virsh define %s' % cirros_path+'/cirros1.xml')
     execute_command('virsh define %s' % cirros_path+'/cirros2.xml')
     execute_command('virsh start cirros1')
-    time.sleep(3)
     execute_command('virsh start cirros2')
-    time.sleep(3)
     get_info()
 
+
+def end_vms():
+    execute_command('virsh undefine cirros1')
+    execute_command('virsh undefine cirros2')
 
 replace_image_path('cirros1.xml')
 replace_image_path('cirros2.xml')
 modify_to_root()
 start_vms()
+end_vms()
 
 
 
