@@ -55,7 +55,7 @@ def spice(subtask_id, args):
 # Execute this while run this agent file directly
 if not is_load_external():
     # Run agent
-    # agent.run()
+    agent.run()
     # os.system('bash spice/run.sh')
-    spice(0, 0)
+    # spice(0, 0)
     
