@@ -20,7 +20,7 @@
     <devices>
         <emulator>/usr/libexec/qemu-kvm</emulator>
         <disk type="file" device="cdrom">
-            <source file="/root/PycharmProjects/ovirt/node_ta/vm_trouble/cirros-disk.img"/>
+            <source file="/home/qemu/cirros-disk.img"/>
             <target dev="hdb" bus="ide" />
         </disk>
         <interface type="bridge">       <!--虚拟机网络连接方式-->

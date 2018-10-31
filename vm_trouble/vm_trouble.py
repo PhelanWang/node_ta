@@ -50,11 +50,12 @@ def get_info():
     data += hyper_infor
     return data
 
+
 # 将cirrosx.xml中的IMAGE_PATH替换为正确路径
 def replace_image_path(file_path):
     file = open(file_path, 'rw+')
-    # cirros_path = os.getcwd() + '/vm_trouble/cirros-disk.img'
-    cirros_path = os.getcwd() + '/cirros-disk.img'
+    cirros_path = os.getcwd() + '/vm_trouble/cirros-disk.img'
+    # cirros_path = os.getcwd() + '/cirros-disk.img'
     lines = file.readlines()
     for index in range(0, len(lines)):
         if 'source file' in lines[index]:
@@ -69,22 +70,29 @@ def replace_image_path(file_path):
 
 # 启动cirros1和cirros2两台虚拟机
 def start_vms():
-    # cirros_path = os.getcwd() + '/vm_trouble'
-    cirros_path = os.getcwd()
+    cirros_path = os.getcwd() + '/vm_trouble'
+    # cirros_path = os.getcwd()
     execute_command('virsh define %s' % cirros_path+'/cirros1.xml')
     execute_command('virsh define %s' % cirros_path+'/cirros2.xml')
     execute_command('virsh start cirros1')
     execute_command('virsh start cirros2')
 
 
+def copy_image():
+    os.system('cp vm_trouble/cirros-disk.img /home/qemu')
+    os.system('chown qemu /home/qemu/cirros-disk.img')
+
+
 def end_vms():
     execute_command('virsh undefine cirros1')
     execute_command('virsh undefine cirros2')
+
 
 def shutdown_all_vm():
     pids = os.popen('pidof qemu-kvm').read().strip(' \n').split(' ')
     for pid in pids:
         os.system('kill -9 %s' % pid)
+
 
 def shutdown_one_vm():
     pids = os.popen('pidof qemu-kvm').read().strip(' \n').split(' ')
@@ -93,16 +101,15 @@ def shutdown_one_vm():
 
 def execute_test():
     shutdown_all_vm()
-    replace_image_path('cirros1.xml')
-    replace_image_path('cirros2.xml')
-    modify_to_root()
+    # replace_image_path('vm_trouble/cirros1.xml')
+    # replace_image_path('vm_trouble/cirros2.xml')
+    # modify_to_root()
+    copy_image()
     start_vms()
     before_data = get_info()
     shutdown_one_vm()
     after_data = get_info()
     shutdown_one_vm()
-    print before_data
-    print after_data
     end_vms()
     return before_data, after_data
 
