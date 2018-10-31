@@ -57,5 +57,5 @@ if not is_load_external():
     # Run agent
     agent.run()
     # os.system('bash spice/run.sh')
-    spice(0, 0)
+    # spice(0, 0)
     
