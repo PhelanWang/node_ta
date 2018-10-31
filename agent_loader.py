@@ -2,24 +2,25 @@
 __author__ = 'Henry'
 AGENT_LOADER = '1.0'
 
-import thread,time,os
+import thread, time, os
 from json import loads
 
 # Import ctest package
 from lib.agent.ctest import SwitchAgent
 from lib.sqlite.connection import connection
+
 # Create SwitchAgent instance
 agent = SwitchAgent(__name__)
 
+
 def clear():
     if os.path.exists('nfscap'):
-        file=open('nfscap','w')
+        file = open('nfscap', 'w')
         file.write("null")
         file.close()
-    #os.system('nohup lib/virtio_blk/clearlog.sh &')
+
 
 def load_agents():
-    #import os
     with connection.connect_db() as db:
         db.execute_and_commit(['delete from local_table'])
         db.execute_and_commit(['delete from servtag_table'])
@@ -50,12 +51,11 @@ def load_agents():
             db.execute_and_commit(['delete from servtag_table'])
             db.execute_and_commit(['delete from subtask_table'])
         #thread.start_new_thread(clear,())
+
+
 # Entry module
 if __name__ == "__main__":
     # Load all agent
-#     if os.path.exists('/tmp/virtio_write.log'):
-#         os.remove('/tmp/virtio_write.log')
-    # Run service
     globals()['AGENT_LOADER'] = 'AGENT_LOADER'
     load_agents()
     agent.run()
