@@ -32,27 +32,27 @@ class VnicTest(object):
         print pids
         if pids == '':
             return 'ok'
-        else :
+        else:
             return 'false'
 
     #if vms stop ,
     #   delete log begore test and
     #   begin replace bins and modules
     def begin(self):
-        ready=self.is_ready()
+        ready = self.is_ready()
         print "ready = " + ready
+        # 删除vhost_net.log文件，卸载vhost_net模块，替换vhost_net.ko.xz文件
         if ready == "ok":
             # vhost_pck.log保存测试时旁路出的网络数据，加载模块时先删除该文件
-            is_file = os.popen("ls /home/qemu/ | grep 'vhost_net.log'").read().strip("\n").strip(" ");
+            is_file = os.popen("ls /home/qemu/ | grep 'vhost_net.log'").read().strip("\n").strip(" ")
             if is_file == 'vhost_net.log':
                 print "rm this file"
                 os.system("rm -f /home/qemu/vhost_net.log")
-
-            if(ndebug == True):
+            if ndebug:
                 print('start replace. . .')
                 self.replace()
-
             os.system("rmmod vhost_net")
+
             print("Please start vm. . .")
             print time.time()
             for i in range(5):
@@ -62,7 +62,7 @@ class VnicTest(object):
             return True
         else:
             print "Stop all vms on this node!"
-            return  False
+            return False
 
     #if install replace bins and modules don need this function
     # replace qemu-kvm or vhost_net.ko
@@ -118,44 +118,38 @@ class VnicTest(object):
             str = file.read()
             # 获取所有请求头
             htmlstr = re.findall(r'GET.+?\r\n\r\n', str, re.S)
-            for item in htmlstr:
-                print item
             if len(htmlstr) >= 1:
                 report = {
-                    "brief": str,
-                    "detail": htmlstr
+                    "detail": '旁路网络数据成功，列出部分网络的请求头:\n',
+                    "result": reduce(lambda a, b: a + b, htmlstr[:min(4, len(htmlstr))], '')
                 }
             else:
                 report = {
-                    "brief":'未能旁路网卡数据',
-                    "detail":'请检查网络设置，正确访问网络并运行虚拟机'
+                    "detail": '旁路数据成功，但是未能查找到网络通信数据，请检测虚拟机是否能够访问网络!\n',
+                    "result": '请检查网络设置，正确访问网络并运行虚拟机!\n'
                 }
         else:
             report = {
-                "brief":'未能旁路网卡数据',
-                "detail":'请检查网络设置，正确访问网络并运行虚拟机'
+                "detail": '未能旁路网卡数据，请按步骤运行该测试功能，检查网络是否能够访问!\n',
+                "result": '请检查网络设置，正确访问网络并运行虚拟机'
             }
-        #print report["brief"]
         return report
-        #for str1 in htmlstr:
-            #print str1.decode('gbk').encode('utf-8')
 
     # shutdown 会关闭所有的 qemu-kvm 虚拟机进程
     def shutdown(self):
          flag = self.is_ready()
-         while(flag != 'ok') :
+         while flag != 'ok':
              pids = os.popen("pidof " + self.qemu_kvm + "").read().strip('\n').strip(' ').split(' ')
              for pid in pids:
                  os.system("kill -9 " + pid)
-             flag=self.is_ready()
-
-    #return report and dis replace
+             flag = self.is_ready()
+    # return report and disreplace
     def stop(self):
         self.shutdown()
-        # 由于 shutdown 会关闭所有的虚拟机进程，所以模块以一定可以卸载
+        # 由于 shutdown 会关闭所有的虚拟机进程，所以模块以一定可以卸载模块
         os.system("rmmod vhost_net")
-        #########################################
-        if(ndebug == True):
+        if ndebug:
+            # 还原文件
             self.disreplace()
         return self.deal_hexdump()
         #self.getreport()

@@ -1,43 +1,46 @@
 import os
 import re
-#from ta_common import logger, write_to_file
 
 captured = False
+
 
 def get_captured():
     global captured
     return captured
 
+
 def set_captured(true_or_false):
     global captured
     captured = true_or_false
+
 
 def isPathExist(path):
     isExist=os.path.exists(path)
     if not isExist:
         try:
             os.mkdir(path)
-            print("create dir %s success!"%(path))
+            print("create dir %s success!" % path)
         except Exception,e:
-            print("mkdir %s error: "%(path)+str(e))
+            print("mkdir %s error: " % path+str(e))
             return
     else:
-        print("dir %s already exist!"%(path))
+        print("dir %s already exist!" % path)
+
 
 def isEnd(fp):
-    filepointer=fp
-    string=filepointer.read()
-    if string=='':
+    filepointer = fp
+    string = filepointer.read()
+    if string == '':
         return True
     else:
         return False
+
 
 def processPack():
     import os
     print os.getcwd()
     try:
         isPathExist(os.getcwd() + "/sec_network/packlog")
-
         myFile = os.getcwd() + "/sec_network/packlog/originalpackudp"
         os.popen('tshark -i any -R "udp.port==8001" -c 3000 -V > %s' % (myFile))
         f = open(myFile, "r")
@@ -47,22 +50,22 @@ def processPack():
             set_captured(False)
             exit()
         f.seek(0,0)
-        f2 = open(os.getcwd() + "/sec_network/packlog/filterpackudp","wr+")
-        pattern1=re.compile(r'Data\s*\(\s*\d*\s*bytes\s*\)')
-        patten2=re.compile(r'\s*Data:\s*\w*')
-        patten3=re.compile(r'\s*Hypertext\s*Transfer\s*Protocol')
-        patten4=re.compile(r'\s*Frame\s*\d*')
-        while(True):
-            string=f.readline()
-            if(string==''):
+        f2 = open(os.getcwd() + "/sec_network/packlog/filterpackudp", "wr+")
+        pattern1 = re.compile(r'Data\s*\(\s*\d*\s*bytes\s*\)')
+        patten2 = re.compile(r'\s*Data:\s*\w*')
+        patten3 = re.compile(r'\s*Hypertext\s*Transfer\s*Protocol')
+        patten4 = re.compile(r'\s*Frame\s*\d*')
+        while True:
+            string = f.readline()
+            if string == '':
                 if isEnd(f):
                     break
                 continue
 
             if patten3.match(string):
-                while(True):
-                    string=f.readline()
-                    if(string==''):
+                while True:
+                    string = f.readline()
+                    if string == '':
                         if isEnd(f):
                             break
                         continue
@@ -71,9 +74,9 @@ def processPack():
                     f2.writelines(string)
 
             if pattern1.match(string):
-                while(True):
-                    string=f.readline()
-                    if(string==''):
+                while True:
+                    string = f.readline()
+                    if string == '':
                         if isEnd(f):
                             break
                         continue
@@ -87,24 +90,25 @@ def processPack():
         return True
     except Exception,e:
         print("processPack error: "+str(e))
-import os
-def stringMatch(matchArray,myFile= os.getcwd() + "/set_network/packlog/filterpackudp"):
+
+
+def stringMatch(matchArray,myFile=os.getcwd()+"/set_network/packlog/filterpackudp"):
     try:
-        string=''
+        string = ''
         for s in matchArray:
             string += "\s*.*%s.*\s*|"%(str(s))
-        string=string[:-1]
-        pattern=re.compile(string)
-        f=open(myFile,"rb")
+        string = string[:-1]
+        pattern = re.compile(string)
+        f = open(myFile, "rb")
         if isEnd(f):
             print("scratch no packages")
             f.close()
             exit()
         f.seek(0,0)
         while True:
-            readbuff=''
-            readbuff=f.read()
-            if readbuff=='':
+            readbuff = ''
+            readbuff = f.read()
+            if readbuff == '':
                 break
             if pattern.search(readbuff):
                 print("string match successful!")
@@ -118,25 +122,26 @@ def stringMatch(matchArray,myFile= os.getcwd() + "/set_network/packlog/filterpac
 def getfilterpackupd():
     import os
     myFile = os.getcwd() + "/sec_network/packlog/filterpackudp"
-    string=''
+    string = ''
     f=open(myFile,"rb")
     if isEnd(f):
         f.close()
         exit()
     f.seek(0,0)
     while True:
-        readbuff=''
-        readbuff=f.read()
-        if readbuff=='':
+        readbuff = ''
+        readbuff = f.read()
+        if readbuff == '':
             break
         else:
             string = string + readbuff
     f.close()
     return string
 
+
 def capture(s):
     import os
-    array=['Hello World']
+    array = ['message']
     processPack()
     if stringMatch(array, os.getcwd() + "/sec_network/packlog/filterpackudp"):
         set_captured(True)

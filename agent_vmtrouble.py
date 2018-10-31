@@ -46,7 +46,9 @@ def get_info():
 @agent.entry("blue_screen", version="1.0.1")
 def blue_screen():
     get_info()
+    print 'start sleep. . .'
     time.sleep(60)
+    print 'end sleep. . .'
     get_info()
 
 
@@ -54,4 +56,5 @@ def blue_screen():
 # Execute this while run this agent file directly
 if not is_load_external():
     # agent.run()
-    pass
+    # pass
+    blue_screen(0, 0)

@@ -15,7 +15,8 @@ if not is_load_external():
 
 # Register function "my_openvas" on service "openvas"
 # OK
-@agent.entry("spice", version="1.0.2")
+# 格式修改完成
+@agent.entry("spice", version="1.0.1")
 def spice(subtask_id, args):
     # Post report to switch server:
     # agent.post_report(subtask_id, severity, result, brief, detail, json_data)

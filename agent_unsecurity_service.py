@@ -11,36 +11,34 @@ if not is_load_external():
     from lib.agent.ctest import SwitchAgent
 
     # Create SwitchAgent instance
-    agent = SwitchAgent(__name__)
+    agent=SwitchAgent(__name__)
 
 
 # Register function "my_openvas" on service "openvas"
 
 # OJBK
 # 没有抓到数据
-@agent.entry("unsecurity_service_testing", version="1.0.2")
+@agent.entry("unsecurity_service_testing", version="1.0.1")
 def my_unsecurity_service_testing(subtask_id,args):
     from lib.agent.ctest import SwitchAgent
     import threading
     from threading import Thread
     from sec_network import client as cli
     from sec_network import unsecurity_service as unsecurity
-    import time
+    import time, os
     from sec_network.pyTimer import Pysettimer
 
     # Get value of global K-V database item "engine-ip". see get_global(), set_global()
-    #engine_ip = agent.get_global("engine-ip")
+    #engine_ip=agent.get_global("engine-ip")
 
-#     client = Pysettimer(cli.sendmessage, "Hello World")
-    
+#     client=Pysettimer(cli.sendmessage, "Hello World")
+    os.system('python vmnet/server_python2.py localhost:8001 &')
     #---\
     capture = Pysettimer(unsecurity.capture, 'test')
     #---/
-    
-#     client.setDaemon(True)
-#     client.start()
-#     time.sleep(10)
-    
+    # client.setDaemon(True)
+    # client.start()
+    # time.sleep(10)
     #----\
     capture.start()
     capture.join()
@@ -48,41 +46,30 @@ def my_unsecurity_service_testing(subtask_id,args):
     # Post report to switch server:
     # agent.post_report(subtask_id, severity, result, brief, detail, json_data)
     # json_data is default as None
-
     if(unsecurity.get_captured()):
+        with open('sec_network/packlog/filterpackudp', 'r') as file:
+            data = file.readlines()
+            data = reduce(lambda a, b: a + b, data[:min(10, len(data))], '')
+            print data
         print unsecurity.getfilterpackupd()
         agent.post_report(subtask_id,
-                          severity = 1,
-                          result = 0,
-                          brief = 'String Match Successful! ',
-                          detail = 'The message send to the server is captured',
-                          json_data = {
-                              "method": "在ovirt云平台的两个node结点上部署两台虚拟机,分别为vm1和vm2,在vm1中部署一个不安全的服务,发送端部署在vm2中,使用wireshark抓包工具,在发送端或者接收端网卡上抓取数据,以验证云平台的安全性",
-                              "config": "系统要求:\nfedora19+,centos7.0+（kernel支持kvm）\nwireshark-1.10.13-1.fc20.x86_64,ovirt平台,至少一个node节点，一个虚拟机",
-                              "logs": [
-                                    {"type": "text", "content": unsecurity.getfilterpackupd()}
-                                ],
-                              "conclusions": [{"type":"text", "content":"The data  is captured."}]
-                          })
+                          severity=1,
+                          result=0,
+                          brief='String Match Successful! ',
+                          detail='抓取到通信数据，虚拟机网络联通的，测试程序传输的UDP数据未加密。\n',
+                          json_data=data)
     else:
         print 'else'
         agent.post_report(subtask_id,
-                          severity = 1,
-                          result =1 ,
-                          brief = 'String Match failed',
-                          detail = 'The message send to the server cannot captured',
-                          json_data = {
-                              "method": "在ovirt云平台的两个node结点上部署两台虚拟机,分别为vm1和vm2,在vm1中部署一个不安全的服务,发送端部署在vm2中,使用wireshark抓包工具,在发送端或者接收端网卡上抓取数据,以验证云平台的安全性",
-                              "config": "系统要求:\nfedora19+,centos7.0+（kernel支持kvm）\nwireshark-1.10.13-1.fc20.x86_64,ovirt平台,至少一个node节点，一个虚拟机",
-                              "logs": [
-                                    {"type": "text", "content":'The data cannot be captured'}
-                                ],
-                              "conclusions": [{"type":"text", "content":"The data cannot be captured"}]
-                          })
+                          severity=1,
+                          result=1,
+                          brief='String Match failed',
+                          detail='测试中未抓取到数据，虚拟机网络不联通或者操作步骤不正确。\n',
+                          json_data='未获取到通信数据。\n')
 
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    # my_unsecurity_service_testing(0, 0)
+    my_unsecurity_service_testing(0, 0)
     # Run agent
-    agent.run()
+    # agent.run()

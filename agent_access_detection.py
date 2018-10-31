@@ -20,20 +20,31 @@ if not is_load_external():
 def host_access_controll_detection(subtask_id, args):
     # 使用系统命令，列出根目录的文件访问控制权限
     result = os.system('ls -lh /')
+    detail = '列出被测试节点的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
     agent.post_report(subtask_id,
                       severity=1,
                       result=0,
-                      brief='result of erase_scan',
-                      detail='Failed!',
-                      json_data={'detail_report': 'Disk status error!'})
+                      brief='',
+                      detail=detail,
+                      json_data=result)
 
 
 # 虚拟机访问控制检测
 @agent.entry("vm_access_detection", version="1.0.1")
 def vm_access_controller_detection(subtask_id, args):
     from access_detection.vm_access_controll_detection import list_access_controll, get_vm_infor
-    list_access_controll(args)
-    # get_vm_infor(args)
+    result = list_access_controll(args)
+    detail = '列出虚拟机磁盘的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
+    print result
+    print detail
+    return
+
+    agent.post_report(subtask_id,
+                      severity=1,
+                      result=0,
+                      brief='',
+                      detail=detail,
+                      json_data=result)
 
 # Execute this while run this agent file directly
 if not is_load_external():
