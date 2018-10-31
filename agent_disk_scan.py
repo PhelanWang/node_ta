@@ -56,9 +56,6 @@ def my_erase_scan(subtask_id, args):
     
     disk_path = args["path"]
     result = get_total_save(disk_path)
-    
-    # os.system('rm -rf '+disk_path)
-    
     print 'result: ', result
     if result == "ERROR":
         agent.post_report(subtask_id,
@@ -67,11 +64,13 @@ def my_erase_scan(subtask_id, args):
                           brief='result of erase_scan',
                           detail='进行磁盘扫描失败。\n',
                           json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n")
-        return    
+        return
+    os.system('cp '+disk_path+' '+disk_path+'1')
+    os.system('rm '+disk_path)
     report = do_erase_scan()
     print report
-
-    if report == None:
+    os.system('mv '+disk_path+'1'+' '+disk_path)
+    if not report:
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
@@ -163,8 +162,8 @@ if not is_load_external():
 
     # my_disk_scan(0, args)
     # my_erase_scan(0, args)
-    my_cross_memory(0, 0)
+    # my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent
-    # agent.run()
+    agent.run()
 
