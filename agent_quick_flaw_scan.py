@@ -105,9 +105,9 @@ def my_quick_VDSMflaw_scan(subtask_id,args):
 if not is_load_external():
     # my_quick_VDSMflaw_scan(0, 0)
     # my_quick_libvirtflaw_scan(0, 0)
-    my_quick_ovirtflaw_scan(0, 0)
+    # my_quick_ovirtflaw_scan(0, 0)
     # my_quick_kvmflaw_scan(0, 0)
     # Run agent
-    # agent.run()
+    agent.run()
 
 # 格式修改全部完成
