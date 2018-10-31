@@ -53,8 +53,8 @@ class Mounter(object):
             return False
         else:
             print 'create thread start'
-            t1=startvm(self.img_path,name='kristen01')
-            t2=startvm(self.img_path,name='kristen02')
+            t1 = startvm(self.img_path,name='kristen01')
+            t2 = startvm(self.img_path,name='kristen02')
             t1.start()
             t2.start()
             print 'create thread end'
@@ -109,7 +109,7 @@ class startvm(threading.Thread):
         #while not self.thread_stop:
         print 'start vm'
         os.system("/usr/libexec/qemu-kvm -name %s -m 2048 %s" % (self.name, self.path))
-        #time.sleep(50)
+        time.sleep(1)
         print 'Thread  start %s,Time %s \n' % (self.path,time.ctime())
 
     def stop(self):

@@ -72,8 +72,8 @@ def virtual_disk_scan(args):
     if not os.path.exists("/home/qemu/"):
         os.mkdir("/home/qemu/")
         os.system("chown qemu /home/qemu")
-        os.system("chmod 777 /home/qmeu")
-    # os.system('rm /home/qemu/virtio_blk.log')
+        os.system("chmod 777 /home/qemu")
+    os.system('rm /home/qemu/virtio_blk.log')
 
     # 启动测试之前先关闭所有的 qemu-kvm 进程
     print("start shutdown. . .\n")
@@ -85,7 +85,7 @@ def virtual_disk_scan(args):
     print("Please start vm. . .")
     for i in range(5):
         print(str(i)+' ')
-        # time.sleep(60)
+        time.sleep(60)
 
     print("start shutdown. . .\n")
     shutdown()
@@ -110,10 +110,10 @@ def virtual_disk_scan(args):
             if file_data == '':
                 data += '未找到关键字: ' + file_name + ' 相关内容!\n'
             else:
-                data += '找到关键字: ' + file_name + ' 相关内容如下: '
+                data += '找到关键字: ' + file_name + ' 相关内容如下:\n'
                 data += file_data + '\n'
         finally:
             fo.close()
-            # os.system('rm ' + '/home/qemu/' + file_name + '.txt')
-    # os.system('rm ' + '/home/qemu/virio_blk.log')
+            os.system('rm ' + '/home/qemu/' + file_name + '.txt')
+    os.system('rm /home/qemu/virtio_blk.log')
     return data

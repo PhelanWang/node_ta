@@ -50,7 +50,7 @@ def do_scan(disk_path, disk_size, symbol):
         if(len(scan_content) != 0):
             scan_content = reduce_lines(scan_content, symbol)
             if scan_content != '':
-                result = "在扫描内容中发现相关内容:<br>" + scan_content + "<br>"
+                result = "在扫描内容中发现相关内容:\n" + scan_content + "\n"
                 is_contain = True
                 break
     if not is_contain:
@@ -60,8 +60,8 @@ def do_scan(disk_path, disk_size, symbol):
     return result
 
 def symbol_scan(disk_path, disk_size):
-    detail = "开始虚拟磁盘扫描:<br>"
-    detail += "虚拟磁盘大小:" + str(disk_size) + "<br>"
+    detail = "开始虚拟磁盘扫描:\n"
+    detail += "虚拟磁盘大小:" + str(disk_size) + "\n"
 #     windows_symbol_list=['microsoft','windows']
 #     linux_symbol_list=['linux','jiffies']
     symbol_list = ['boot', 'root', 'environment', 'path', 'service', 'user', 'password']
@@ -71,11 +71,11 @@ def symbol_scan(disk_path, disk_size):
         is_contain = False
         for symbol in symbol_list:
             scan_result = do_scan(disk_path, disk_size, symbol)
-            detail += "<br>关键字:" + symbol + scan_result
+            detail += "\n关键字:" + symbol + scan_result
             if not (scan_result == " 在扫描内容中未发现"):
                 is_contain = True
                 break
-        detail += "<br>虚拟磁盘扫描结束!"
+        detail += "\n虚拟磁盘扫描结束!"
         if is_contain:
             result = "发现关键字，虚拟磁盘未加密!"
         else:
@@ -85,8 +85,8 @@ def symbol_scan(disk_path, disk_size):
     except:
         return "磁盘错误, 扫描出现未指定错误!"
 
+
 if __name__ == "__main__":
     vm_disk_path = "/kvm/images/c8f5ff0c-52b5-490b-b9b4-d11b5e0e78e2/images/1aebe17c-f885-4f58-9a60-5307d700d88a/ec64733d-a88e-4325-8298-a09102946823"
-    
     vm_disk_size=int(get_vm_disk_size(vm_disk_path))
     print symbol_scan(vm_disk_path,vm_disk_size)
