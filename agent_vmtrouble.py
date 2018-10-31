@@ -37,6 +37,6 @@ def blue_screen(subtask_id, args):
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    # agent.run()
+    agent.run()
     # pass
-    blue_screen(0, 0)
+    # blue_screen(0, 0)
