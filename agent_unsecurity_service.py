@@ -32,16 +32,13 @@ def my_unsecurity_service_testing(subtask_id,args):
     #engine_ip=agent.get_global("engine-ip")
 
 #     client=Pysettimer(cli.sendmessage, "Hello World")
-
     os.system('python vmnet/server_python2.py localhost:8001 &')
     #---\
     capture = Pysettimer(unsecurity.capture, 'test')
     #---/
-    
-#     client.setDaemon(True)
-#     client.start()
-#     time.sleep(10)
-    
+    # client.setDaemon(True)
+    # client.start()
+    # time.sleep(10)
     #----\
     capture.start()
     capture.join()

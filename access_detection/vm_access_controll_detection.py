@@ -3,6 +3,19 @@
 import os
 
 
+# 比较两个版本的大小，版本格式x.xx或x.x
+def version_comapre(v1, v2):
+    if not '.' in v1:
+        return False
+    v1 = v1.split('.')
+    v2 = v2.split('.')
+    if int(v1[0]) > int(v2[0]):
+        return True
+    elif int(v1[0]) == int(v2[0]):
+        if int(v1[1]) >= int(v2[1]):
+            return True
+    return False
+
 # 将虚拟磁盘挂在到 /mnt目录下
 def mount_disk(args):
     mod_path = os.getcwd() + '/access_detection/nbd.ko'
@@ -14,6 +27,7 @@ def mount_disk(args):
 def umount_disk():
     os.system('umount /mnt')
     os.system('qemu-nbd --disconnect /dev/nbd0')
+    os.system('rmmod nbd.ko')
 
 
 # 使用linux命令虚拟机磁盘，然后返回根目录下的文件的访问控制权限
@@ -40,5 +54,4 @@ def get_vm_infor(args):
     result += '虚拟机操作系统版本: '
     result += os.popen('cat /mnt/etc/issue').read()
     umount_disk()
-    print result
-    print version.split('-')[0]
+    return result, version.split('-')[0]
