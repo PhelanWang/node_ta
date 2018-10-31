@@ -25,7 +25,7 @@ def spice(subtask_id, args):
     conf = ConfigParser.ConfigParser()
     conf.read('spice_vnc.conf')
     port = conf.get('SPICE', 'port', '5900')
-    cmd = 'tshark -i any -n -f "src port '+port+'" -d "tcp.port=='+port+',vnc" -a duration:120 -w data.cap'
+    cmd = 'tshark -i any -n -f "src port '+port+'" -d "tcp.port=='+port+',vnc" -a duration:60 -w data.cap'
     print 'please wait 2 mins,spice is testing...'
     print cmd
     os.system(cmd)
@@ -57,5 +57,5 @@ if not is_load_external():
     # Run agent
     agent.run()
     # os.system('bash spice/run.sh')
-    # spice(0, 0)
+    spice(0, 0)
     
