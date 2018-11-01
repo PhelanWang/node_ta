@@ -12,9 +12,12 @@ server_port = None
 server_entry = {}
 instrusive_entry = {}
 remote_key = '$REMOTE_BASE_URL'
-TASK_STATUS = {'work': 0, 
-   'done': 1, 
-   'fail': -1}
+TASK_STATUS = {
+    'work': 0,
+    'done': 1,
+    'fail': -1
+}
+
 
 def load_remote_base_url_from_local():
     global remote_base_url
@@ -58,8 +61,8 @@ class HeartRequest(Resource):
     def get(self):
         return {"status": "true"}
 
-class ServtagRequest(Resource):
 
+class ServtagRequest(Resource):
     def get(self):
         global server_port
         new_url = 'http://%s:%d' % (request.remote_addr, server_port)
@@ -213,12 +216,13 @@ class TaskRequest:
 
     @staticmethod
     def post_report(subtask_id, severity, result, brief, detail, json_data=None):
-        payload = {'severity': severity, 
-           'result': result, 
-           'brief': brief, 
-           'detail': detail, 
-           'subtask_id': subtask_id, 
-           'timestamp': now()}
+        payload = {
+            'severity': severity,
+            'result': result,
+            'brief': brief,
+            'detail': detail,
+            'subtask_id': subtask_id,
+            'timestamp': now()}
         if json_data:
             payload['json_data'] = dumps(json_data)
 #         post_url('%s/switch/report' % remote_base_url, payload)
@@ -288,11 +292,11 @@ class SwitchAgent:
             config_name = '%s.conf' % __name__
             self.config = ConfigParser()
             self.config.read(config_name)
-            server_port = int(self.config.get('network', 'server-port', '9090'))
+            server_port = int(self.config.get('network', 'server-port', '5000'))
             db_filename = self.config.get('database', 'file', ':memory:')
             agent_version = self.config.get('system', 'version', '1.0.3')
             #remote base url
-            remote_base_url = self.config.get('network', 'server-base', 'http://localhost:9090')
+            remote_base_url = self.config.get('network', 'server-base', 'http://localhost:5000')
             self.local_key = self.config.get('module', 'local-key', 'agent_path')
             paths = self.config.get('module', 'path', '')
             if paths:
@@ -349,9 +353,9 @@ class SwitchAgent:
 
     @staticmethod
     def post_report(subtask_id, severity, result, brief, detail, json_data=None):
-        global TASK_STATUS
-        TaskRequest.set_subtask_status(subtask_id, TASK_STATUS['done'])
-        TaskRequest.put_subtask_status(subtask_id, TASK_STATUS['done'])
+        # global TASK_STATUS
+        # TaskRequest.set_subtask_status(subtask_id, TASK_STATUS['done'])
+        # TaskRequest.put_subtask_status(subtask_id, TASK_STATUS['done'])
         TaskRequest.post_report(subtask_id, severity, result, brief, detail, json_data)
 
     @staticmethod
@@ -406,7 +410,7 @@ class SwitchAgent:
 
     def run(self):
         try:
-            self.agent_port = int(self.config.get('network', 'agent-port', '9090'))
+            self.agent_port = int(self.config.get('network', 'agent-port', '9099'))
             self.debug_mode = self.config.getboolean('system', 'debug')
             self.multi_thread = self.config.getboolean('system', 'multi-thread')
             # 不用注册远程方法了
