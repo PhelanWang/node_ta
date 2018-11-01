@@ -54,6 +54,10 @@ class VersionInfo(Resource):
         return {'version': agent_version}
 
 
+class HeartRequest(Resource):
+    def get(self):
+        return {"status": "true"}
+
 class ServtagRequest(Resource):
 
     def get(self):
@@ -258,14 +262,17 @@ class InstrusiveInvoker(Resource):
         return {'code': 'error'}
 
 
-API_MAP = {'version': VersionInfo, 
-   'servtag': ServtagRequest, 
-   'subtask': SubTaskAgent, 
-   'subtask/<string:subtask_id>': SubTaskAgentID, 
-   'instrusive': InstrusiveInvoker}
+API_MAP = {
+    'version': VersionInfo,
+    'servtag': ServtagRequest,
+    'swtich/agent/subtask': SubTaskAgent,
+    'subtask/<string:subtask_id>': SubTaskAgentID,
+    'instrusive': InstrusiveInvoker,
+    'isExist': HeartRequest
+}
+
 
 class SwitchAgent:
-
     def __init__(self, module_name):
         global agent_version
         global remote_base_url
@@ -281,11 +288,11 @@ class SwitchAgent:
             config_name = '%s.conf' % __name__
             self.config = ConfigParser()
             self.config.read(config_name)
-            server_port = int(self.config.get('network', 'server-port', '8083'))
+            server_port = int(self.config.get('network', 'server-port', '9090'))
             db_filename = self.config.get('database', 'file', ':memory:')
             agent_version = self.config.get('system', 'version', '1.0.3')
             #remote base url
-            remote_base_url = self.config.get('network', 'server-base', 'http://localhost:8083')
+            remote_base_url = self.config.get('network', 'server-base', 'http://localhost:9090')
             self.local_key = self.config.get('module', 'local-key', 'agent_path')
             paths = self.config.get('module', 'path', '')
             if paths:
@@ -293,7 +300,8 @@ class SwitchAgent:
                 # connection database
             connection(db_filename).prepare()
             self.app = Flask(self.module_name)
-            register_api_resources(Api(self.app), API_MAP, '/switch/agent')
+            # register_api_resources(Api(self.app), API_MAP, '/switch/agent/')
+            register_api_resources(Api(self.app), API_MAP, '')
         except Exception as e:
             print 'Error on initialization.\nPlease check if the config file name is "%s"' % config_name
             print_exception(__name__, e)
@@ -307,8 +315,12 @@ class SwitchAgent:
             'type': 0}
         post_url('%s/switch/ip' % remote_base_url, payload)
 
-    def entry(self, service_name, version='1.0.0'):
+    # 注册节点信息
+    def post_host_info(self):
+        from host_info import get_sytem_info
+        post_url('%s/nodeRegister' % remote_base_url, payload=get_sytem_info())
 
+    def entry(self, service_name, version='1.0.1'):
         def register_entry(F):
             try:
                 # print service_name, version,'a'
@@ -394,7 +406,7 @@ class SwitchAgent:
 
     def run(self):
         try:
-            self.agent_port = int(self.config.get('network', 'agent-port', '8085'))
+            self.agent_port = int(self.config.get('network', 'agent-port', '9090'))
             self.debug_mode = self.config.getboolean('system', 'debug')
             self.multi_thread = self.config.getboolean('system', 'multi-thread')
             # 不用注册远程方法了
@@ -402,6 +414,7 @@ class SwitchAgent:
 
             # 暂时不用
             # self.post_ip()
+            self.post_host_info()
             self.app.run(host='0.0.0.0', port=self.agent_port, debug=self.debug_mode, use_reloader=self.debug_mode, threaded=self.multi_thread)
         except Exception as e:
             print_exception(__name__, e)

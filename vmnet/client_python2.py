@@ -5,8 +5,11 @@ import time
 
 if __name__ == "__main__":
 
-    ip, port = sys.argv[1].split(":")
-    ip_port = (ip, int(port))
+    try:
+        ip, port = sys.argv[1].split(":")
+        ip_port = (ip, int(port))
+    except:
+        ip_port = ('localhost', 8001)
 
     sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sk.settimeout(10)

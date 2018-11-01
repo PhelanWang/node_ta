@@ -14,9 +14,12 @@ def get_host_ip():
 
 
 def get_ovrit_version():
-    line = os.popen('rpm -qa | grep ovirt-engine-backend').read()
-    version = re.findall(r'([0-9].[0-9])', line)[0]
-    print version
+    line = os.popen('rpm -qa | grep ovirt-release-host-node').read()
+    try:
+        version = re.findall(r'([0-9].[0-9])', line)[0]
+    except:
+        version = '4.2'
+    return version
 
 # 获取虚拟机的版本信息
 def get_architecture():
@@ -31,7 +34,8 @@ def get_sytem_info():
         'node_ip': get_host_ip(),
         'node_port': '9090',
         'node_OSVersion': get_host_version(),
-        'node_typ': get_architecture()
+        'node_typ': get_architecture(),
+        'node_oVirtVersion': get_ovrit_version()
     }
 
 

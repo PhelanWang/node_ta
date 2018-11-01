@@ -53,6 +53,7 @@ def put_url(url, payload, timeout=0):
     except:
         return {'code': 'error'}
 
+
 def post_url(url, payload, timeout=0):
     try:
         headers={'Content-Type': 'application/json'}
@@ -62,6 +63,7 @@ def post_url(url, payload, timeout=0):
         return do_post().json()
     except:
         return {'code': 'error'}
+
 
 def print_exception(module, exception):
     print '%s module run() exception: %s with %s' % \
