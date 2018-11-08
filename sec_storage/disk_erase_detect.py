@@ -22,8 +22,8 @@ def get_mount_point():
     info = os.popen('df -hl %s' % disk_belong_root_dic).read().split('\n')
     mount_info = info[1].split(' ')
     mount_point = mount_info[0]
-    print mount_point
     return mount_point
+
 
 # 提取出磁盘路径
 def get_disk_dir(disk_path):
@@ -184,18 +184,19 @@ def get_total_save(disk_path):
 
 def do_erase_scan():
     detail = "开始磁盘擦除扫描:\n"
-    is_erased = False
+    is_erased = True
     s = os.popen('cat /tmp/cloud_erase_test/list').read().split('\n')[0:-1]
+    print 's: ', s
     for item in s:
         is_same = block_compare(item)
         detail += '扫描磁盘删除后的第 ' + str(s.index(item) + 1) + ' 个磁盘块:\n'
         detail += '磁盘块编号为: ' + item + ' \n'
         if is_same:
             detail += '扫描完成，该块在磁盘删除后内容和删除之前的内容相同。\n'
+            is_erased = False
         else:
-            is_erased = True
             detail += '扫描完成，该块在磁盘删除后内容和删除之前的内容不相同。\n'
-            break
+            # break
 
     if not is_erased:
         result = '找到磁盘删除前后，内容相同的磁盘块，磁盘未完全擦除。\n'

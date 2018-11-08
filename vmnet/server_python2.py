@@ -5,9 +5,10 @@ import sys
 
 
 if __name__ == "__main__":
-    ip, port = sys.argv[1].split(":")
-    ip_port = (ip, int(port))
+    # ip, port = sys.argv[1].split(":")
+    # ip_port = (ip, int(port))
 
+    ip_port = ('0.0.0.0', 8001)
     sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sk.bind(ip_port)
 

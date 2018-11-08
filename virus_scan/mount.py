@@ -66,10 +66,10 @@ class Mounter(object):
             return False
         elif flag:
             try:
-                pid1=os.popen("ps -ef |grep -v grep |grep qemu-kvm |grep kristen01|awk {'print $2'}").read().strip('\n')
-                print 'pid1',pid1
-                pid2=os.popen("ps -ef |grep -v grep |grep qemu-kvm |grep kristen02|awk {'print $2'}").read().strip('\n')
-                print 'pid2',pid2
+                pid1 = os.popen("ps -ef |grep -v grep |grep qemu-kvm |grep kristen01|awk {'print $2'}").read().strip('\n')
+                print 'pid1', pid1
+                pid2 = os.popen("ps -ef |grep -v grep |grep qemu-kvm |grep kristen02|awk {'print $2'}").read().strip('\n')
+                print 'pid2', pid2
 
                 port1 = os.popen("netstat -ntpl |grep  "+pid1+" |grep qemu-kvm |awk '{print $4}' |cut -d ':' -f 4" ).read()
                 port2 = os.popen("netstat -ntpl |grep  "+pid2+" |grep qemu-kvm |awk '{print $4}' |cut -d ':' -f 4" ).read()
@@ -81,11 +81,13 @@ class Mounter(object):
                 else:
                     rst += ' 启动失败。\n'
                 rst = rst + '对镜像启动第一个虚拟机 vm2'
+
                 if port2 != '':
                     rst += " 启动成功, 虚拟机 VNC 服务运行在端口 %s 。\n" % str(port2)
                 else:
                     rst += ' 启动失败。\n'
-#                 rst =rst.strip(' ') +"start vm2 , VNC server running on %s" % str(port2)
+#                 rst = rst.strip(' ') +"start vm2 , VNC server running on %s" % str(port2)
+
                 if (port1 == '' and port2 != '') or (port1 != '' and port2 == ''):
                     rst += '不能够多重挂载该虚拟机镜像, 虚拟机镜像是安全的。'
                 elif port1 != '' and port2 != '':

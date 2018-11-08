@@ -56,7 +56,6 @@ def my_erase_scan(subtask_id, args):
     
     disk_path = args["path"]
     result = get_total_save(disk_path)
-    print 'result: ', result
     if result == "ERROR":
         agent.post_report(subtask_id,
                           severity=1,
@@ -68,7 +67,6 @@ def my_erase_scan(subtask_id, args):
     os.system('cp '+disk_path+' '+disk_path+'1')
     os.system('rm '+disk_path)
     report = do_erase_scan()
-    print report
     os.system('mv '+disk_path+'1'+' '+disk_path)
     if not report:
         agent.post_report(subtask_id,
@@ -78,7 +76,7 @@ def my_erase_scan(subtask_id, args):
                           detail='进行磁盘扫描失败。\n'.replace('\n', '</br>'),
                           json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n".replace('\n', '</br>'))
     else:
-        print report['result'], report['detail']
+        print 'report', report['result'], 'detail', report['detail']
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
@@ -89,7 +87,7 @@ def my_erase_scan(subtask_id, args):
 # OK   
 # 保存文件大小到文件中   
 # args {'path': '/root/share/c3d4181e-bfda-4c78-bfb6-d7205959db02'}) 
-@agent.entry("erase_save", version="1.0.1")
+# @agent.entry("erase_save", version="1.0.1")
 def my_erase_save(subtask_id,args):
     from sec_storage.disk_erase_detect import get_total_save,do_erase_scan
     disk_path = args["path"]
@@ -157,11 +155,11 @@ if not is_load_external():
     # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # args['name'] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
 
-    args['path'] = '/root/PycharmProjects/1fe0032b-aabd-4315-8390-6bbac5844ea5'
+    args['path'] = '/root/PycharmProjects/test/1fe0032b-aabd-4315-8390-6bbac5844ea5'
     args['name'] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
 
     # my_disk_scan(0, args)
-    my_erase_scan(0, args)
+    # my_erase_scan(0, args)
     # my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent

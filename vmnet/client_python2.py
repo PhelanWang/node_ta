@@ -24,5 +24,6 @@ if __name__ == "__main__":
             time.sleep(2)
     except Exception, e:
         print '测试结束. . .'
+        print e
 
     sk.close()

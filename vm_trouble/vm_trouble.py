@@ -116,4 +116,3 @@ def execute_test():
     shutdown_one_vm()
     end_vms()
     return before_data, after_data
-

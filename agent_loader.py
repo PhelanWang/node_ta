@@ -64,4 +64,5 @@ if __name__ == "__main__":
 '''
 虚拟磁盘可能不能挂载
 yum install net-tools //netstat
+磁盘擦除不能挂载
 '''

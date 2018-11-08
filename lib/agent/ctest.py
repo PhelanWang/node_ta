@@ -421,7 +421,7 @@ class SwitchAgent:
 
             # 暂时不用
             # self.post_ip()
-            self.post_host_info()
+            # self.post_host_info()
             self.app.run(host='0.0.0.0', port=self.agent_port, debug=self.debug_mode, use_reloader=self.debug_mode, threaded=self.multi_thread)
         except Exception as e:
             print_exception(__name__, e)
