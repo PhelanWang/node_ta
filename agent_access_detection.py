@@ -34,6 +34,8 @@ def host_access_controll_detection(subtask_id, args):
 @agent.entry("vm_access_detection", version="1.0.1")
 def vm_access_controller_detection(subtask_id, args):
     from access_detection.vm_access_controll_detection import list_access_controll, get_vm_infor
+    import time
+    time.sleep(5)
     result = list_access_controll(args)
     detail = '列出虚拟机磁盘的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
     print result

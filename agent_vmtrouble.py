@@ -20,6 +20,8 @@ if not is_load_external():
 @agent.entry("blue_screen", version="1.0.1")
 def blue_screen(subtask_id, args):
     from vm_trouble.vm_trouble import execute_test
+    import time
+    time.sleep(25)
     before_data, after_data = execute_test()
     result = '启动两台虚拟机后，信息如下:\n' + before_data + \
              '\n一台虚拟机故障后，信息如下:\n' + after_data

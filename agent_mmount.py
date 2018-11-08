@@ -24,6 +24,8 @@ if not is_load_external():
 @agent.entry("mmount", version="1.0.1")
 def mmount_test(subtask_id, args):
     from virus_scan.mount import Mounter
+    import time
+    time.sleep(60)
     disk_path = ''
     disk_name = ''
     disk_type = ''
@@ -40,9 +42,9 @@ def mmount_test(subtask_id, args):
     # mount = mt.mount()
     report = mt.getReport()
     mt.killid()
-    rpt=''
-    detail=''
-    brief=''
+    rpt = ''
+    detail = ''
+    brief = ''
     print '---------------'
     print report
     print '---------------'

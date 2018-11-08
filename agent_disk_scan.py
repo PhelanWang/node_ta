@@ -25,6 +25,8 @@ if not is_load_external():
 @agent.entry("disk_scan", version="1.0.1")
 def my_disk_scan(subtask_id,args):
     from sec_storage.disk_scan import get_vm_disk_size,symbol_scan
+    import time
+    time.sleep(15)
     vm_disk_path = args["path"]
     vm_disk_size = int(get_vm_disk_size(vm_disk_path))
     report = symbol_scan(vm_disk_path, vm_disk_size)

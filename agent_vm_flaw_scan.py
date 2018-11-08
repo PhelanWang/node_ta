@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 def is_load_external():
     return globals().has_key('AGENT_LOADER')
 
@@ -13,10 +12,11 @@ if not is_load_external():
 @agent.entry("vm_flaw_scan", version='1.0.1')
 def vm_flaw_scan(subtask_id, args):
     from access_detection.vm_access_controll_detection import get_vm_infor, version_comapre
-    import sqlite3, re
+    import sqlite3, re, time
     # args = {'path': '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb',
     #         'name': '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'}
     json_data = []
+    time.sleep(10)
     infor, version = get_vm_infor(args)
     version = '.'.join(version.split('.')[:2])
 
@@ -32,7 +32,7 @@ def vm_flaw_scan(subtask_id, args):
             if flaw_version and version_comapre(flaw_version[0], version):
                 json_data.append(item)
 
-    print json_data
+    # print json_data
     agent.post_report(subtask_id,
                       severity=0,
                       result=1,
