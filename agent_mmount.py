@@ -63,15 +63,15 @@ def mmount_test(subtask_id, args):
                           severity=1,
                           result=0,
                           brief=brief,
-                          detail=detail,
-                          json_data=report)
+                          detail=detail.replace('\n', '</br>'),
+                          json_data=report.replace('\n', '</br>'))
 
 
 # Execute this while run this agent file directly
 if not is_load_external():
     # Run agent
-    args = {}
-    args["path"] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
-    args["name"] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    # args = {}
+    # args["path"] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    # args["name"] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # mmount_test(0, args)
     agent.run()

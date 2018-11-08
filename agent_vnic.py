@@ -37,8 +37,8 @@ def vnic_analysis(subtask_id, args):
                       severity=1,
                       result=1,
                       brief=None,
-                      detail=rpt['detail'],
-                      json_data=rpt['result'])
+                      detail=rpt['detail'].replace('\n', '</br>'),
+                      json_data=rpt['result'].replace('\n', '</br>'))
 
 # Execute this while run this agent file directly
 if not is_load_external():

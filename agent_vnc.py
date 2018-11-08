@@ -50,8 +50,8 @@ def vnc(subtask_id, args):
                       severity=0,
                       result=1,
                       brief='VNC',
-                      detail='获取VNC协议的数据内容，若有明文，则可能部分数据未加密!\n',
-                      json_data=result)
+                      detail='获取VNC协议的数据内容，若有明文，则可能部分数据未加密!\n'.replace('\n', '</br>'),
+                      json_data=result.replace('\n', '</br>'))
 
 # Execute this while run this agent file directly
 if not is_load_external():

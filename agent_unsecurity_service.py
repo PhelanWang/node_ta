@@ -56,16 +56,16 @@ def my_unsecurity_service_testing(subtask_id,args):
                           severity=1,
                           result=0,
                           brief='String Match Successful! ',
-                          detail='抓取到通信数据，虚拟机网络联通的，测试程序传输的UDP数据未加密。\n',
-                          json_data=data)
+                          detail='抓取到通信数据，虚拟机网络联通的，测试程序传输的UDP数据未加密。\n'.replace('\n', '</br>'),
+                          json_data=data.replace('\n', '</br>'))
     else:
         print 'else'
         agent.post_report(subtask_id,
                           severity=1,
                           result=1,
                           brief='String Match failed',
-                          detail='测试中未抓取到数据，虚拟机网络不联通或者操作步骤不正确。\n',
-                          json_data='未获取到通信数据。\n')
+                          detail='测试中未抓取到数据，虚拟机网络不联通或者操作步骤不正确。\n'.replace('\n', '</br>'),
+                          json_data='未获取到通信数据。\n'.replace('\n', '</br>'))
 
 
 # Execute this while run this agent file directly

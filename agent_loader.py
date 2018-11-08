@@ -59,3 +59,9 @@ if __name__ == "__main__":
     globals()['AGENT_LOADER'] = 'AGENT_LOADER'
     load_agents()
     agent.run()
+
+
+'''
+虚拟磁盘可能不能挂载
+yum install net-tools //netstat
+'''

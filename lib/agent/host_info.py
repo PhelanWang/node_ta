@@ -32,10 +32,8 @@ def get_host_version():
 def get_sytem_info():
     return {
         'node_ip': get_host_ip(),
-        'node_port': '9090',
-        'node_OSVersion': get_host_version(),
-        'node_typ': get_architecture(),
-        'node_oVirtVersion': get_ovrit_version()
+        'node_os_version': get_host_version(),
+        'node_ovirt_version': get_ovrit_version()
     }
 
 

@@ -32,8 +32,8 @@ def blue_screen(subtask_id, args):
                       severity=0,
                       result=1,
                       brief='',
-                      detail=detail,
-                      json_data=result)
+                      detail=detail.replace('\n', '</br>'),
+                      json_data=result.replace('\n', '</br>'))
 
 # Execute this while run this agent file directly
 if not is_load_external():

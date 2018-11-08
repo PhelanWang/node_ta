@@ -12,6 +12,8 @@ server_port = None
 server_entry = {}
 instrusive_entry = {}
 remote_key = '$REMOTE_BASE_URL'
+
+
 TASK_STATUS = {
     'work': 0,
     'done': 1,
@@ -226,7 +228,7 @@ class TaskRequest:
         if json_data:
             payload['json_data'] = dumps(json_data)
 #         post_url('%s/switch/report' % remote_base_url, payload)
-            post_url('%s/report' % remote_base_url, payload)
+            post_url('%s/reportReturn' % remote_base_url, payload)
             
 
     @staticmethod
@@ -269,10 +271,10 @@ class InstrusiveInvoker(Resource):
 API_MAP = {
     'version': VersionInfo,
     'servtag': ServtagRequest,
-    'swtich/agent/subtask': SubTaskAgent,
+    'switch/agent/subtask': SubTaskAgent,
     'subtask/<string:subtask_id>': SubTaskAgentID,
     'instrusive': InstrusiveInvoker,
-    'isExist': HeartRequest
+    'nodeIsExist': HeartRequest
 }
 
 
@@ -322,6 +324,7 @@ class SwitchAgent:
     # 注册节点信息
     def post_host_info(self):
         from host_info import get_sytem_info
+        print '%s/nodeRegister' % remote_base_url
         post_url('%s/nodeRegister' % remote_base_url, payload=get_sytem_info())
 
     def entry(self, service_name, version='1.0.1'):

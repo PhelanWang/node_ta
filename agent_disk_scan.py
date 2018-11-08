@@ -26,7 +26,7 @@ if not is_load_external():
 def my_disk_scan(subtask_id,args):
     from sec_storage.disk_scan import get_vm_disk_size,symbol_scan
     vm_disk_path = args["path"]
-    vm_disk_size=int(get_vm_disk_size(vm_disk_path))
+    vm_disk_size = int(get_vm_disk_size(vm_disk_path))
     report = symbol_scan(vm_disk_path, vm_disk_size)
     if report == "磁盘错误, 扫描出现未指定错误!" or report == "磁盘错误, 无法获取磁盘空间信息!":
         detail = report + "请检测磁盘路径是否正确。"
@@ -40,8 +40,8 @@ def my_disk_scan(subtask_id,args):
                       severity=1,
                       result=0,
                       brief='result of disk_scan',
-                      detail=detail,
-                      json_data=report)
+                      detail=detail.replace('\n', '</br>'),
+                      json_data=report.replace('\n', '</br>'))
 
 # OK
 # 删除文件，并检测是否擦除
@@ -62,8 +62,8 @@ def my_erase_scan(subtask_id, args):
                           severity=1,
                           result=0,
                           brief='result of erase_scan',
-                          detail='进行磁盘扫描失败。\n',
-                          json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n")
+                          detail='进行磁盘扫描失败。\n'.replace('\n', '</br>'),
+                          json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n".replace('\n', '</br>'))
         return
     os.system('cp '+disk_path+' '+disk_path+'1')
     os.system('rm '+disk_path)
@@ -75,16 +75,16 @@ def my_erase_scan(subtask_id, args):
                           severity=1,
                           result=0,
                           brief='result of erase_scan',
-                          detail='进行磁盘扫描失败。\n',
-                          json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n")
+                          detail='进行磁盘扫描失败。\n'.replace('\n', '</br>'),
+                          json_data="进行指定磁盘扫描失败，请检查给定路径是否正确。\n".replace('\n', '</br>'))
     else:
         print report['result'], report['detail']
         agent.post_report(subtask_id,
                           severity=1,
                           result=0,
                           brief='result of erase_scan',
-                          detail=report['detail'],
-                          json_data=report['result'])
+                          detail=report['detail'].replace('\n', '</br>'),
+                          json_data=report['result'].replace('\n', '</br>'))
  
 # OK   
 # 保存文件大小到文件中   
@@ -119,14 +119,14 @@ def my_cross_memory(subtask_id, args):
             detail += '\n未发现交叉内存页面!'
         else:
             detail += '\n发现交叉内存页面，显示部分交叉页面地址如下:\n' \
-                      '若要显示所有交叉的内存页面地址，查看节点上文件，路径为：' + os.getcwd() + '/memory_scan_umuery/v_result'
+                      '若要显示所有交叉的内存页面地址，查看节点上文件，路径为：' + os.getcwd() + '/memory_scan_umuery/v_result'.replace('\n', '</br>')
     print detail, '\n', report
     agent.post_report(subtask_id,
                         severity = 1,
                         result = 0,
                         brief = 'done',
-                        detail = detail,
-                        json_data=report)
+                        detail = detail.replace('\n', '</br>'),
+                        json_data=report.replace('\n', '</br>'))
 
 # 格式修改完成
 @agent.entry("virtual_disk_scan", version="1.0.1")
@@ -145,8 +145,8 @@ def my_vdisk_scan(subtask_id, args):
                       severity=1,
                       result=0,
                       brief='done',
-                      detail=data,
-                      json_data=data)
+                      detail=detail.replace('\n', '</br>'),
+                      json_data=data.replace('\n', '</br>'))
 
 # Execute this while run this agent file directly
 if not is_load_external():
@@ -161,7 +161,7 @@ if not is_load_external():
     args['name'] = '1fe0032b-aabd-4315-8390-6bbac5844ea5'
 
     # my_disk_scan(0, args)
-    # my_erase_scan(0, args)
+    my_erase_scan(0, args)
     # my_cross_memory(0, 0)
     # my_vdisk_scan(0, args)
     # Run agent

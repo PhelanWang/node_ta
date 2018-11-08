@@ -33,7 +33,7 @@ def umount_disk():
 # 使用linux命令虚拟机磁盘，然后返回根目录下的文件的访问控制权限
 def list_access_controll(args):
     mount_disk(args)
-    result = os.system('ls -lh /mnt')
+    result = os.popen('ls -lh /mnt').read()
     umount_disk()
     return result
 

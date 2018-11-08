@@ -16,7 +16,7 @@ if not is_load_external():
 @agent.entry("host_access_detection", version="1.0.1")
 def host_access_controll_detection(subtask_id, args):
     # 使用系统命令，列出根目录的文件访问控制权限
-    result = os.system('ls -lh /')
+    result = os.popen('ls -lh /').read()
     detail = '列出被测试节点的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
 
     print result
@@ -27,7 +27,7 @@ def host_access_controll_detection(subtask_id, args):
                       result=0,
                       brief='',
                       detail=detail,
-                      json_data=result)
+                      json_data=result.replace('\n', '</br>'))
 
 
 # 虚拟机访问控制检测
@@ -44,7 +44,7 @@ def vm_access_controller_detection(subtask_id, args):
                       result=0,
                       brief='',
                       detail=detail,
-                      json_data=result)
+                      json_data=result.replace('\n', '</br>'))
 
 
 # Execute this while run this agent file directly
