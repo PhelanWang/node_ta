@@ -14,9 +14,9 @@ def getFlawInfoBySql(sql):
   print(os.getcwd())
   cur = con.cursor()
   versions = ovirt_get_versions() #versions = {'redhat': '3.0','ovirt-engine-sdk': '3.1.0.5','ubuntu': 'none'}
-  sss=versions["ovirt"]
+  sss = versions["ovirt"]
   inum = cur.execute(sql)
-  inlist=[]
+  inlist = []
   fitinlist = []
   while(1):
     row = cur.fetchone()

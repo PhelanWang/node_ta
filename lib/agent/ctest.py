@@ -130,7 +130,9 @@ class SubTaskAgent(Resource):
                                subtask['serv_name'],
                                subtask['serv_version'],
                                subtask['status'])]])
+                            print '+++++++++++++' + subtask['server_name'] + '+++++++++++'
                             print subtask['args']
+                            print '++++++++++++++++++++++++++++++++++++++++++++++++++++++'
                             SimpleThread(entry, subtask['id'], loads(subtask['args'].replace("'", '"').replace('u', '')) if subtask['args'] else '').start()
                             return {'code': 'success', 'id': subtask['id']}
                     except Exception as e:

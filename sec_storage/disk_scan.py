@@ -50,11 +50,11 @@ def do_scan(disk_path, disk_size, symbol):
         if(len(scan_content) != 0):
             scan_content = reduce_lines(scan_content, symbol)
             if scan_content != '':
-                result = "在扫描内容中发现相关内容:\n" + scan_content + "\n"
+                result = "在扫描内容中发现相关明文内容:\n" + scan_content + "\n"
                 is_contain = True
                 break
     if not is_contain:
-        result = " 在扫描内容中未发现"
+        result = " 在扫描内容中未发现明文"
 #     if(is_contain==True and need_print==True):
 #         result = result + "<br>" + scan_content +"<br>"
     return result
@@ -72,14 +72,17 @@ def symbol_scan(disk_path, disk_size):
         for symbol in symbol_list:
             scan_result = do_scan(disk_path, disk_size, symbol)
             detail += "\n关键字:" + symbol + scan_result
-            if not (scan_result == " 在扫描内容中未发现"):
+            if not (scan_result == " 在扫描内容中未发现明文"):
                 is_contain = True
                 break
         detail += "\n虚拟磁盘扫描结束!"
         if is_contain:
-            result = "发现关键字，虚拟磁盘未加密!"
+            result = "本次测试检测给定磁盘是否加密，检测方式是扫描磁盘，是否能在磁盘中发现明文关键字\n" \
+                     "在磁盘中找到明文关键字，磁盘部分数据未加密!\n" \
+                     "扫描列出了地址，明文内容十六进制数据，明文内容。"
         else:
-            result = "未发现关键字，虚拟磁盘或许有加密!"
+            result = "本次测试检测给定磁盘是否加密，检测方式是扫描磁盘，是否能在磁盘中发现明文关键字\n" \
+                     "在磁盘中未找到明文关键字，磁盘数据是加密的!"
         ret = {"result": result, "detail": detail}
         return ret
     except:

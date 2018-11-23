@@ -8,7 +8,7 @@ CREATE TABLE Ovirt_flaw_scan (
   f_describe TEXT  NULL,
   pub_date TEXT  NULL,
   ud_date TEXT  NULL,
-  product TEXT  NULL ,
+  product TEXT  NULL,
   version TEXT  NULL,
   influence TEXT  NULL);
 INSERT INTO "Ovirt_flaw_scan" VALUES(1,'CVE-2015-0257','Red Hat Enterprise Virtualization Manager 权限许可和访问控制漏洞(CNNVD-201505-008)','CVSS分值:2.1[轻微(LOW)]','RHEV Manager 3.5.1之前版本中存在安全漏洞，该漏洞源于服务启动时，程序为ovirt-engine-dwhd服务和插件共享的目录分配弱权限。本地攻击者可通过读取目录中的文件利用该漏洞获取敏感信息。','2015-05-01','2015-05-11','null','_产品及版本信息(CPE)暂不可用','机密性影响:PARTIAL[很可能造成信息泄露]完整性影响:NONE[不会对系统完整性产生影响]可用性影响:NONE[对系统可用性无影响]攻击复杂度:LOW[漏洞利用没有访问限制 ]攻击向量:LOCAL[漏洞利用需要具有物理访问权限或本地帐户]身份认证:NONE[漏洞利用无需身份认证]');

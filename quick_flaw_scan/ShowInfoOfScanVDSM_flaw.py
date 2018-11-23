@@ -12,6 +12,7 @@ def getFlawInfoBySql(sql):
   con = sqlite3.connect('quick_flaw_scan/cloud.db')
   cur = con.cursor()
   versions = get_enterprise_virtualization_version()
+  print 'versions:', versions
   #versions = {'redhat': '3.2','cisco': '3.3.1','ubuntu': 'none'}
   inum = cur.execute(sql)
   inlist=[]

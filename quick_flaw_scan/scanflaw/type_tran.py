@@ -129,15 +129,13 @@ def ovirt_get_versions():
 
 #get VDSM version
 def get_enterprise_virtualization_version():
-  (status,out)=commands.getstatusoutput('rpm -qa|grep enterprise_virtualization')
-  if(out.find('未找到命令')):
-      return 'none'
-  if(out.find('3.0')):
-      return '3.0'
-  elif(out.find('3.2')):
-      return '3.2'
-  else:
-      return 'none'
+    line = os.popen('rpm -qa | grep ovirt-engine-backend').read()
+    try:
+        version = re.findall(r'([0-9].[0-9])', line)[0]
+    except:
+        version = '4.2'
+    return version
+
 def VDSM_get_versions():
   slist={'enterprise_virtualization':get_enterprise_virtualization_version()}
   return slist

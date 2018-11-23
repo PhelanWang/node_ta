@@ -18,9 +18,11 @@ def version_comapre(v1, v2):
 
 # 将虚拟磁盘挂在到 /mnt目录下
 def mount_disk(args):
+    import time
     mod_path = os.getcwd() + '/access_detection/nbd.ko'
     os.system('insmod ' + mod_path + ' max_part=16')
     os.system('qemu-nbd -c /dev/nbd0 ' + args['path'])
+    time.sleep(3)
     os.system('mount /dev/nbd0p1 /mnt')
 
 
@@ -33,7 +35,7 @@ def umount_disk():
 # 使用linux命令虚拟机磁盘，然后返回根目录下的文件的访问控制权限
 def list_access_controll(args):
     mount_disk(args)
-    result = os.popen('ls -lh /mnt').read()
+    result = ''.join(os.popen("ls -lh /mnt | awk '{print $1,$3,$4,$9}'").readlines()[1:])
     umount_disk()
     return result
 

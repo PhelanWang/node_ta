@@ -20,7 +20,7 @@ if not is_load_external():
 
 # OK
 # 对于同一个磁盘mount两个会出错，尝试只启动一台
-# 格式修改完成
+# 格式修改完成，返回内容修改完成
 @agent.entry("mmount", version="1.0.1")
 def mmount_test(subtask_id, args):
     from virus_scan.mount import Mounter
@@ -50,13 +50,13 @@ def mmount_test(subtask_id, args):
     print '---------------'
 
     if report == False:
-        rpt = '启动虚拟机失败，该磁盘不可引导或未初始化。\n'
-        brief = '启动虚拟机失败。\n'
-        detail = '该磁盘不可引导或未初始化。\n'
+        detail = '磁盘多重挂载测试对于同一个虚拟磁盘，是否能够同时挂载到多个虚拟机。\n' \
+                 '测试中尝试对一个磁盘进行多重挂载。' \
+                 '本次测试失败，给定磁盘不可引导或未初始化。\n'
     else:
-        brief = '成功启动虚拟机'
-        detail = '对于同一个磁盘，尝试对该磁盘启动两个虚拟机。\n'
-        rpt = report
+        detail = '磁盘多重挂载测试对于同一个虚拟磁盘，是否能够同时挂载到多个虚拟机。\n' \
+                 '测试中尝试对一个磁盘进行多重挂载。' \
+                 '本次测试成功，测试结果如下：\n'
 
     print '----'
     print detail
@@ -72,8 +72,9 @@ def mmount_test(subtask_id, args):
 # Execute this while run this agent file directly
 if not is_load_external():
     # Run agent
-    # args = {}
-    # args["path"] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
-    # args["name"] = '96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
-    # mmount_test(0, args)
-    agent.run()
+    args = {}
+    args["path"] = '/root/data/72fb40f0-f2c1-4edc-a81c-739c1205f208/images/c88f8df3-3f0d-4587-8be1-cc21f526c3a0/' \
+                   '1309ea24-0181-424b-a147-0cc866633428'
+    args["name"] = '1309ea24-0181-424b-a147-0cc866633428'
+    mmount_test(0, args)
+    # agent.run()

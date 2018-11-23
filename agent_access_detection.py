@@ -16,8 +16,12 @@ if not is_load_external():
 @agent.entry("host_access_detection", version="1.0.1")
 def host_access_controll_detection(subtask_id, args):
     # 使用系统命令，列出根目录的文件访问控制权限
-    result = os.popen('ls -lh /').read()
-    detail = '列出被测试节点的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
+    result = ''.join(os.popen("ls -lh / | awk '{print $1,$3,$4,$9}'").readlines()[1:])
+    detail = '本次测试获取物理机根目录下文件或目录访问控制权限。\n' \
+             '列出的被测试节点的根目录访问权限，第一列的第一个字符代表文件(-)、目录(d)、链接(l)。\n' \
+             '其余字符每3个一组(rwx)，第一组是文件所有者的权限，第二组是与文件所有者同一组的用户权限，第三组是与文件所有者不同组用户权限。\n' \
+             '每组中字符代表无权限(-）、可读(r)、可写(w)、可执行(x)\n' \
+             '第二列表示为文件用户，第三列表文件用户所在的组，第四列表示文件名或目录名。'
 
     print result
     print detail
@@ -26,7 +30,7 @@ def host_access_controll_detection(subtask_id, args):
                       severity=1,
                       result=0,
                       brief='',
-                      detail=detail,
+                      detail=detail.replace('\n', '</br>'),
                       json_data=result.replace('\n', '</br>'))
 
 
@@ -37,7 +41,11 @@ def vm_access_controller_detection(subtask_id, args):
     import time
     time.sleep(5)
     result = list_access_controll(args)
-    detail = '列出虚拟机磁盘的根目录访问权限，r代表可读，w代表可写，x代表可执行。\n'
+    detail = '本次测试获取虚拟机根目录下文件或目录访问控制权限。\n' \
+             '列出的被测试虚拟机的根目录访问权限，第一列的第一个字符代表文件(-)、目录(d)、链接(l)。\n' \
+             '其余字符每3个一组(rwx)，第一组是文件所有者的权限，第二组是与文件所有者同一组的用户权限，第三组是与文件所有者不同组用户权限。\n' \
+             '每组中字符代表无权限(-）、可读(r)、可写(w)、可执行(x)\n' \
+             '第二列表示为文件用户，第三列表文件用户所在的组，第四列表示文件名或目录名。'
     print result
     print detail
 
@@ -45,14 +53,16 @@ def vm_access_controller_detection(subtask_id, args):
                       severity=1,
                       result=0,
                       brief='',
-                      detail=detail,
+                      detail=detail.replace('\n', '</br>'),
                       json_data=result.replace('\n', '</br>'))
 
 
 # Execute this while run this agent file directly
 if not is_load_external():
-    # args = {}
-    # args['path'] = '/root/PycharmProjects/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
+    args = {}
+    # args['path'] = '/root/PycharmProjects/cp/96d9b1b5-2f45-4baf-8462-5a166c87a3bb'
     # vm_access_controller_detection(0, args)
     # host_access_controll_detection(0, args)
     agent.run()
+
+# 更新返回内容

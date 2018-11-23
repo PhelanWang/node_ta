@@ -5,6 +5,7 @@ from sessoin import SqliteSession
 
 singleton_connection_instance = None
 
+
 class connection:
     def __init__(self, connection_string):
         global singleton_connection_instance

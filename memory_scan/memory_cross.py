@@ -43,7 +43,6 @@ def getallvm_mem():
     return report
 
 
-
 def memory_scan():
     import os
     import sys
@@ -122,7 +121,9 @@ def mem_quchong(v_id1, v_id2):
     sq = os.popen("ps %d" % (v_id2)).read()
     s2 = re.findall('guest=(.*?),', sq, re.S)
 
-    head_line = "虚拟机进程号为:" + str(v_id1) + " " + "虚拟机名为:" + str(s1) + " " + "和虚拟机:进程号为:" + str(v_id2) + " " + "虚拟机名为:" + str(s2) + "的比较结果如下：\n"
+    head_line = "虚拟机进程号为:" + str(v_id1) + " " + "虚拟机名为:" + str(s1) + " " + \
+                "和虚拟机:进程号为:" + str(v_id2) + " " + "虚拟机名为:" + str(s2) + \
+                "的交叉页面地址如下：\n"
     xieci.writelines(head_line)
     report_lines.append(head_line)
 

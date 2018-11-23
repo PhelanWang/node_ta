@@ -75,6 +75,7 @@ class Mounter(object):
                 port2 = os.popen("netstat -ntpl |grep  "+pid2+" |grep qemu-kvm |awk '{print $4}' |cut -d ':' -f 4" ).read()
                 
                 port1 = port1.strip('\n')
+                port2 = port2.strip('\n')
                 rst = "对镜像启动第一个虚拟机 vm1"
                 if port1 != '':
                     rst += " 启动成功, 虚拟机 VNC 服务运行在端口 %s。 \n" % str(port1)
@@ -89,11 +90,11 @@ class Mounter(object):
 #                 rst = rst.strip(' ') +"start vm2 , VNC server running on %s" % str(port2)
 
                 if (port1 == '' and port2 != '') or (port1 != '' and port2 == ''):
-                    rst += '不能够多重挂载该虚拟机镜像, 虚拟机镜像是安全的。'
+                    rst += '测试表明对于一个磁盘，只能启动一个虚拟机，不能够多重挂载该虚拟机磁盘。'
                 elif port1 != '' and port2 != '':
-                    rst += '能够多重挂载该虚拟机镜像, 虚拟机镜像是不安全的。'
+                    rst += '测试表明对于一个磁盘，能够启动一个以上的虚拟机，能够多重挂载该虚拟机磁盘。'
                 elif port1 == '' and port2 == '':
-                    rst += '对指定镜像两个虚拟机都不能够启动，请检查磁盘路径是否正确。'
+                    rst += '对指定镜像两个虚拟机都不能够挂载，请检查磁盘路径是否正确。'
                 return rst
             except:
                 print "throw exception on start vms "
@@ -110,7 +111,7 @@ class startvm(threading.Thread):
     def run(self):
         #while not self.thread_stop:
         print 'start vm'
-        os.system("/usr/libexec/qemu-kvm -name %s -m 2048 %s" % (self.name, self.path))
+        os.system("/usr/libexec/qemu-kvm -name %s %s" % (self.name, self.path))
         time.sleep(1)
         print 'Thread  start %s,Time %s \n' % (self.path,time.ctime())
 
