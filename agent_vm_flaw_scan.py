@@ -18,26 +18,32 @@ def vm_flaw_scan(subtask_id, args):
     json_data = []
     time.sleep(10)
     infor, version = get_vm_infor(args)
-    version = '.'.join(version.split('.')[:2])
-
-    conn = sqlite3.connect('data/vm_flaw.db')
-    c = conn.cursor()
-    result = c.execute('SELECT TITLE, DETAIL, IMPACT_PRODUCT FROM FLAW_TABLE').fetchall()
-    for line in result:
-        item = {}
-        item['bugName'] = line[0]
-        item['bugInfo'] = line[1]
-        if 'Linux Kernel' in line[2]:
-            flaw_version = re.findall(r'([0-9].[0-9])', line[2])
-            if flaw_version and version_comapre(flaw_version[0], version):
-                json_data.append(item)
+    if (not infor) or (not version):
+        brief = '虚拟机中未发现漏洞。'
+        json_data = [{'bugName': '无', 'bugInfo': '无'}]
+    else:
+        brief = '获取虚拟机系统信息:\n'+infor+'\n虚拟机中可能存在的漏洞如下：'
+        version = '.'.join(version.split('.')[:2])
+        conn = sqlite3.connect('data/vm_flaw.db')
+        c = conn.cursor()
+        result = c.execute('SELECT TITLE, DETAIL, IMPACT_PRODUCT FROM FLAW_TABLE').fetchall()
+        for line in result:
+            item = {}
+            item['bugName'] = line[0]
+            item['bugInfo'] = line[1]
+            if 'Linux Kernel' in line[2]:
+                flaw_version = re.findall(r'([0-9].[0-9])', line[2])
+                if flaw_version and version_comapre(flaw_version[0], version):
+                    json_data.append(item)
+        if len(json_data) == 0:
+            json_data = [{'bugName': '无', 'bugInfo': '无'}]
 
     # print json_data
     agent.post_report(subtask_id,
                       severity=0,
                       result=1,
                       brief='',
-                      detail='获取虚拟机系统信息:\n'+infor,
+                      detail=brief,
                       json_data=json_data)
 
 

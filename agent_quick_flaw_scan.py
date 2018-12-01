@@ -24,6 +24,7 @@ def my_quick_kvmflaw_scan(subtask_id,args):
     from quick_flaw_scan.ShowInfoOfScankvm_flaw import getFlawInfoBySql
     virus_table = "select * from kvm_flaw_scan"
     # 此处的report返回一个包含所有kvm漏洞信息的列表
+    report = []
     report = getFlawInfoBySql(virus_table)
     if report == []:
         detail = '在此系统中没有发现QEMU-KVM漏洞'

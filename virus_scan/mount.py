@@ -81,7 +81,7 @@ class Mounter(object):
                     rst += " 启动成功, 虚拟机 VNC 服务运行在端口 %s。 \n" % str(port1)
                 else:
                     rst += ' 启动失败。\n'
-                rst = rst + '对镜像启动第一个虚拟机 vm2'
+                rst = rst + '对镜像启动第二个虚拟机 vm2'
 
                 if port2 != '':
                     rst += " 启动成功, 虚拟机 VNC 服务运行在端口 %s 。\n" % str(port2)

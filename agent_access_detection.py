@@ -48,7 +48,8 @@ def vm_access_controller_detection(subtask_id, args):
              '第二列表示为文件用户，第三列表文件用户所在的组，第四列表示文件名或目录名。'
     print result
     print detail
-
+    if not result:
+        result = '获取磁盘信息失败，请正确安装虚拟机到磁盘上。'
     agent.post_report(subtask_id,
                       severity=1,
                       result=0,
